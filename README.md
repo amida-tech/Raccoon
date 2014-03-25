@@ -3,4 +3,4 @@ Raccoon
 
 Raccoon is a node.js Data Raccoonciliation Engine for Health Data.
 
-![Raccoon](http://farm9.staticflickr.com/8366/8465325847_daf121e55e_o.jpg)
+![Raccoon](http://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Yawning_Raccoon.jpg/976px-Yawning_Raccoon.jpg)
