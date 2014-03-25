@@ -18,39 +18,35 @@ var express = require('express');
 var http = require('http');
 var mongoose = require('mongoose');
 var jsdom = require('jsdom');
+var logger = require('winston');
 var app = express();
 var config = require('./config.js');
 
-// Connect mongoose
-mongoose.connect('mongodb://' + config.database.url + '/'+ config.database.name);
+var parser = require('./lib/bluebutton.min.js');
+var matcher = require('./lib/match.js');
+var reviewer = require('./lib/reconciliation.js');
+var master = require('./lib/record.js');
 
-
-/*
-var identity = require('./lib/identity');
-var storage = require('./lib/storage');
-var access = require('./lib/access');
-var hie = require('./lib/hie');
-var master = require('./lib/master');
-var direct = require('./lib/direct');
-var account = require('./lib/account');
-var profile = require('./lib/profile');
-var provider = require('./lib/provider');
-var delegation  = require('./lib/delegation');
-var system  = require('./lib/system');
-
-
-app.use(identity);
-app.use(storage);
-app.use(access);
-app.use(hie);
+app.use(parser);
+app.use(matcher);
+app.use(reviewer);
 app.use(master);
-app.use(direct);
-app.use(account);
-app.use(profile);
-app.use(delegation);
-app.use(provider);
-app.use(system);
-*/
+
+app.set("domain", config.server.url);
+
+// Connect mongoose.
+mongoose.connect('mongodb://' + config.database.url + '/'+ config.database.name, function(err) {
+    if (err) {
+        logger.error('DB Connection Error: ' + err);
+        throw err;
+    }
+});
+
+
+var server = http.createServer(app);
+server.listen(config.server.port);
+console.log("Server listening on port "+ config.server.port);
+
 
 /*
 //This is code used to override the need of a second database.
@@ -73,4 +69,4 @@ require('./lib/db').init(db_settings, function(connections) {
     server.listen(config.server.port);
     console.log("Server listening on port "+ config.server.port);
 });
-/*
+*/
