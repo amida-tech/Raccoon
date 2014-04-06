@@ -1,0 +1,89 @@
+[
+  {
+    "date_range": {
+      "start": "2009-09-02T04:00:00.000Z",
+      "end": "2010-01-03T05:00:00.000Z"
+    },
+    "name": null,
+    "code": "416098002",
+    "code_system": null,
+    "code_system_name": null,
+    "status": null,
+    "severity": null,
+    "reaction": {
+      "name": null,
+      "code": "247472004",
+      "code_system": null
+    },
+    "reaction_type": {
+      "name": null,
+      "code": "282100009",
+      "code_system": null,
+      "code_system_name": null
+    },
+    "allergen": {
+      "name": null,
+      "code": "314422",
+      "code_system": null,
+      "code_system_name": null
+    }
+  },
+  {
+    "date_range": {
+      "start": "2009-09-02T04:00:00.000Z",
+      "end": "2010-01-03T05:00:00.000Z"
+    },
+    "name": null,
+    "code": "416098002",
+    "code_system": null,
+    "code_system_name": null,
+    "status": null,
+    "severity": null,
+    "reaction": {
+      "name": null,
+      "code": "56018004",
+      "code_system": null
+    },
+    "reaction_type": {
+      "name": null,
+      "code": "282100009",
+      "code_system": null,
+      "code_system_name": null
+    },
+    "allergen": {
+      "name": null,
+      "code": "R16CO5Y76E",
+      "code_system": null,
+      "code_system_name": null
+    }
+  },
+  {
+    "date_range": {
+      "start": "2009-09-02T04:00:00.000Z",
+      "end": "2010-01-03T05:00:00.000Z"
+    },
+    "name": null,
+    "code": "416098002",
+    "code_system": null,
+    "code_system_name": null,
+    "status": null,
+    "severity": null,
+    "reaction": {
+      "name": null,
+      "code": "73879007",
+      "code_system": null
+    },
+    "reaction_type": {
+      "name": null,
+      "code": "282100009",
+      "code_system": null,
+      "code_system_name": null
+    },
+    "allergen": {
+      "name": null,
+      "code": "Q830PW7520",
+      "code_system": null,
+      "code_system_name": null
+    }
+  }
+]
