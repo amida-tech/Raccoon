@@ -16,58 +16,7 @@ limitations under the License.
 
 var should = require('should');
 var db = require('../../lib/record');
-db.logger.level = 'debug';
-
-describe('Basic Test', function() {
-    before(function(done) {
-        db.once('error', function(err) {
-            done(err);
-        });
-        db.once('connected', function() {
-            done();
-        });
-
-        db.connect();
-    });
-    
-    it('Put/Get Master Demographics/Allergies', function(done) {
-        var input = Object.create(null);
-        var inputDemo = input['demographics'] = Object.create(null);
-        inputDemo.data = {section: 'demographics', testkey: {demokey: 'demodata'}};
-        inputDemo.metadata = {metadone: 'metadone', metadtwo: 'metadtwo'};
-        var inputAlle = input['allergies'] = Object.create(null);
-        inputAlle.data = {section: 'allergies', testkey: {allekey: 'alledata'}};
-        inputAlle.metadata = {metaaone: 'metaaone', metaatwo: 'metaatwo'};
-        db.putMaster('testuser', input, null, function(err) {
-            if (err) {
-                done(err);
-            } else {
-                db.getMaster("testuser", null, function(err, output) {
-                    if (err) {
-                        done(err);
-                    } else {
-                        should(output).have.property('demographics');
-                        should(output).have.property('allergies');
-                        outDemo = output['demographics'];
-                        outAlle = output['allergies'];
-                        should(outDemo).have.property('data');
-                        should(outDemo).have.property('metadata');
-                        should(outDemo.data).have.property('section', 'demographics');
-                        should(outDemo.metadata).have.property('metadone', 'metadone');
-                        should(outDemo.metadata).have.property('metadtwo', 'metadtwo');
-                        done();
-                    }
-                });
-            }
-        });
-    });
-    
-    after(function(done) {
-        db.disconnect(function() {
-            done();
-        });
-    });
-});
+// db.logger.level = 'debug';
 
 describe('Section Methods', function() {
     var testOwner = 'testowner';
@@ -205,6 +154,263 @@ describe('Section Methods', function() {
                done();
            });
        });
+    });
+    
+    after(function(done) {
+        db.dropAll(function(err0, result) {
+            db.disconnect(function(err1) {
+                done(err0 || err1);
+            });
+        });
+    });    
+});
+
+describe('Master Methods Add/Remove Seperate', function() {
+    var testOwner = 'testowner';
+    
+    before(function(done) {
+        db.once('error', function(err) {
+            done(err);
+        });
+        db.once('connected', function() {
+            db.dropAll(function(err, result) {
+                if (err) {
+                    done(err);
+                } else {
+                    var inputRecord = {
+                        'dummysectionfull': {
+                            data: 'expldatafull',
+                            metadata: 'explmetadatafull'
+                        },
+                        'dummysectionremove1': {
+                            data: 'expldataremove1',
+                            metadata: 'explmetadataremove1'
+                        },
+                        'dummysectionremove2': {
+                            data: 'expldataremove2',
+                            metadata: 'explmetadataremove2'
+                        }
+                    };
+                    
+                    db.putMaster(testOwner, inputRecord, null, function(err) {
+                        done(err);
+                    });
+                }
+            });
+        });
+        
+        var options = {
+            ownerTitle: 'testowner',
+            sectionTitles: ['dummysectionadd1', 'dummysectionadd2', 'dummysectionremove1', 'dummysectionremove2', 'dummysectionnull', 'dummysectionfull']
+        };
+        db.connect(null, options);
+    });
+    
+    describe('Add', function() {
+        it('Verify Empty', function(done) {
+            db.getMaster(testOwner, null, function(err, result) {
+                should.not.exist(err);
+                should.exist(result);
+                should.not.exist(result.dummysectionadd1);
+                should.not.exist(result.dummysectionadd2);
+                done();
+            });
+        });
+        
+        it('Add Invalid', function(done) {
+            db.putMaster(testOwner, "invalid data", null, function(err) {
+                should.exist(err);
+                done();
+            });
+        });
+        
+        it('Add Valid', function(done) {
+            inputRecord = {
+                dummysectionadd1: {
+                    data: 'expldataadd1',
+                    metadata: 'explmetadataadd1'
+                },
+                dummysectionadd2: {
+                    data: 'expldataadd2',
+                    metadata: 'explmetadataadd2'
+                }
+            };
+            db.putMaster(testOwner, inputRecord, null, function(err) {
+                should.not.exist(err);
+                done();
+            });
+        });
+        
+        it('Verify All', function(done) {
+            options = {sections: ['dummysectionadd1', 'dummysectionadd2', 'dummysectionfull', 'dummysectionnull']};
+            db.getMaster(testOwner, options, function(err, result) {
+                should.not.exist(err);
+                should.exist(result);
+                should.exist(result.dummysectionadd1);
+                should.exist(result.dummysectionadd2);
+                should.exist(result.dummysectionfull);
+                should(result).have.property('dummysectionnull');
+                should(result.dummysectionadd1).have.property('data', 'expldataadd1');
+                should(result.dummysectionadd1).have.property('metadata', 'explmetadataadd1');
+                should(result.dummysectionadd2).have.property('data', 'expldataadd2');
+                should(result.dummysectionadd2).have.property('metadata', 'explmetadataadd2');
+                should(result.dummysectionfull).have.property('data', 'expldatafull');
+                should(result.dummysectionfull).have.property('metadata', 'explmetadatafull');
+                should.not.exist(result.dummysectionnull);
+                done();
+            });
+       });
+    });
+    
+    describe('Remove', function() {
+        it('Verify Exists', function(done) {
+            db.getMaster(testOwner, null, function(err, result) {
+                should.not.exist(err);
+                should.exist(result);
+                should.exist(result.dummysectionremove1);
+                should.exist(result.dummysectionremove2);
+                done();
+            });
+        });
+        
+        it('Remove', function(done) {
+            inputRecord = {
+                dummysectionremove1: null,
+                dummysectionremove2: null
+            };
+            db.putMaster(testOwner, inputRecord, null, function(err) {
+                should.not.exist(err);
+                done();
+            });
+        });
+        
+        it('Verify All', function(done) {
+            options = {sections: ['dummysectionremove1', 'dummysectionremove2', 'dummysectionfull', 'dummysectionnull']};
+            db.getMaster(testOwner, options, function(err, result) {
+                should.not.exist(err);
+                should.exist(result);
+                should(result).have.property('dummysectionremove1');
+                should(result).have.property('dummysectionremove2');
+                should.not.exist(result.dummysectionadd1);
+                should.not.exist(result.dummysectionadd2);
+                should.exist(result.dummysectionfull);
+                should(result).have.property('dummysectionnull');
+                should.not.exist(result.dummysectionremove1);
+                should.not.exist(result.dummysectionremove2);
+                should(result.dummysectionfull).have.property('data', 'expldatafull');
+                should(result.dummysectionfull).have.property('metadata', 'explmetadatafull');
+                should.not.exist(result.dummysectionnull);
+                done();
+            });
+       });
+    });
+    
+    after(function(done) {
+        db.dropAll(function(err0, result) {
+            db.disconnect(function(err1) {
+                done(err0 || err1);
+            });
+        });
+    });    
+});
+
+describe('Master Methods Add/Remove Together', function() {
+    var testOwner = 'testowner';
+    
+    before(function(done) {
+        db.once('error', function(err) {
+            done(err);
+        });
+        db.once('connected', function() {
+            db.dropAll(function(err, result) {
+                if (err) {
+                    done(err);
+                } else {
+                    var inputRecord = {
+                        'dummysectionfull': {
+                            data: 'expldatafull',
+                            metadata: 'explmetadatafull'
+                        },
+                        'dummysectionremove1': {
+                            data: 'expldataremove1',
+                            metadata: 'explmetadataremove1'
+                        },
+                        'dummysectionremove2': {
+                            data: 'expldataremove2',
+                            metadata: 'explmetadataremove2'
+                        }
+                    };
+                    
+                    db.putMaster(testOwner, inputRecord, null, function(err) {
+                        done(err);
+                    });
+                }
+            });
+        });
+        
+        var options = {
+            ownerTitle: 'testowner',
+            sectionTitles: ['dummysectionadd1', 'dummysectionadd2', 'dummysectionremove1', 'dummysectionremove2', 'dummysectionnull', 'dummysectionfull']
+        };
+        db.connect(null, options);
+    });
+    
+    it('Verify Existing', function(done) {
+        db.getMaster(testOwner, null, function(err, result) {
+            should.not.exist(err);
+            should.exist(result);
+            should.not.exist(result.dummysectionadd1);
+            should.not.exist(result.dummysectionadd2);
+            should.exist(result.dummysectionremove1);
+            should.exist(result.dummysectionremove2);
+            should(result.dummysectionremove1).have.property('data', 'expldataremove1');
+            should(result.dummysectionremove1).have.property('metadata', 'explmetadataremove1');
+            should(result.dummysectionremove2).have.property('data', 'expldataremove2');
+            should(result.dummysectionremove2).have.property('metadata', 'explmetadataremove2');
+            done();
+        });
+    });
+        
+    it('Add/Remove', function(done) {
+        inputRecord = {
+            dummysectionadd1: {
+                data: 'expldataadd1',
+                metadata: 'explmetadataadd1'
+            },
+            dummysectionadd2: {
+                data: 'expldataadd2',
+                metadata: 'explmetadataadd2'
+            },
+            dummysectionremove1: null,
+            dummysectionremove2: null
+        };
+        db.putMaster(testOwner, inputRecord, null, function(err) {
+            should.not.exist(err);
+            done();
+        });
+    });
+        
+    it('Verify', function(done) {
+        db.getMaster(testOwner, null, function(err, result) {
+            should.not.exist(err);
+            should.exist(result);
+            should.exist(result.dummysectionadd1);
+            should.exist(result.dummysectionadd2);
+            should.exist(result.dummysectionfull);
+            should(result).have.property('dummysectionremove1');
+            should(result).have.property('dummysectionremove2');
+            should(result).have.property('dummysectionnull');
+            should(result.dummysectionadd1).have.property('data', 'expldataadd1');
+            should(result.dummysectionadd1).have.property('metadata', 'explmetadataadd1');
+            should(result.dummysectionadd2).have.property('data', 'expldataadd2');
+            should(result.dummysectionadd2).have.property('metadata', 'explmetadataadd2');
+            should(result.dummysectionfull).have.property('data', 'expldatafull');
+            should(result.dummysectionfull).have.property('metadata', 'explmetadatafull');
+            should.not.exist(result.dummysectionremove1);
+            should.not.exist(result.dummysectionremove2);
+            should.not.exist(result.dummysectionnull);
+            done();
+        });
     });
     
     after(function(done) {
