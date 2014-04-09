@@ -40,7 +40,7 @@ connection is established such as power down.  record.js keeps track of the conn
 disconnect multiple times. This alleviates the need for applications to keep track of the connection object.
 
 uri is the address of the database and defaults to 'mongodb://localhost/portal'.  options is included for customization and 
-teting purposes.  Currently only two fields are supported:
+testing purposes.  Currently only two fields are supported:
 
 ownerTitle: This is a label internally used to identify database elements that stores owner specific info.  Defaults to 'owner'
 sectionTitles: This is an array of section titles in the master records.  Default to 
@@ -71,11 +71,11 @@ on the actual content of the data and metadata.  Anything that is passed in data
 By default only those sections that has a key in "input" is updated.  You can set any section explicitly to null to remove
 from the master record.  
 
-"option" is added for future customizations.  Currently only field that is supported is 'deleteMissing' which can be used
+"options" is added for future customizations.  Currently only field that is supported is 'deleteMissing' which can be used
 to delete all the sections that are not explicitly specified in "input".
 
 "callback" only returns a single error parameter.  Unlike other typical database update libraries it does not return 
-actual stored object so that any actual database dependency is limited to recod.js.
+actual stored object so that any actual database dependency is limited to record.js.
 
 ```getMaster(owner, [options], callback)```
 
@@ -101,7 +101,7 @@ in the same form in the get methods.
 
 ```dropAll(callback)```
 
-A drop all method is provided all the artifact related to the master record from the database.  It is to be used in unit
+A drop all method is provided to remove all the artifacts related to the master record from the database.  It is used in unit
 tests.
 
 Database Design
@@ -123,8 +123,6 @@ owner in the section collections are not used for lookups.  Instead there is an 
 
 and all owner look ups use this collection.  Currently all the section collection elements are removed immediately once they are 
 replaced by a new master record.  However the chosen database structure lends itself nicely to keep "zombie" section collection elements
-around if we choose that route in the future  The database structure is also 
-
-
-
+around if we choose that route in the future.  Replaced sections can be transfered to an archive and or removed overnight batch process 
+to decrease load  during peak times.
 
