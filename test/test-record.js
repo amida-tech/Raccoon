@@ -15,7 +15,7 @@ limitations under the License.
 ======================================================================*/
 
 var should = require('should');
-var db = require('../../lib/record');
+var db = require('../lib/record');
 // db.logger.level = 'debug';
 
 describe('Section Methods', function() {
@@ -72,7 +72,7 @@ describe('Section Methods', function() {
         });
         
         it('Add Valid', function(done) {
-            inputRecord = {
+            var inputRecord = {
                 data: 'expldataadd',
                 metadata: 'explmetadataadd'
             };
@@ -225,7 +225,7 @@ describe('Master Methods Add/Remove Seperate', function() {
         });
         
         it('Add Valid', function(done) {
-            inputRecord = {
+            var inputRecord = {
                 dummysectionadd1: {
                     data: 'expldataadd1',
                     metadata: 'explmetadataadd1'
@@ -242,7 +242,7 @@ describe('Master Methods Add/Remove Seperate', function() {
         });
         
         it('Verify All', function(done) {
-            options = {sections: ['dummysectionadd1', 'dummysectionadd2', 'dummysectionfull', 'dummysectionnull']};
+            var options = {sections: ['dummysectionadd1', 'dummysectionadd2', 'dummysectionfull', 'dummysectionnull']};
             db.getMaster(testOwner, options, function(err, result) {
                 should.not.exist(err);
                 should.exist(result);
@@ -274,7 +274,7 @@ describe('Master Methods Add/Remove Seperate', function() {
         });
         
         it('Remove', function(done) {
-            inputRecord = {
+            var inputRecord = {
                 dummysectionremove1: null,
                 dummysectionremove2: null
             };
@@ -285,7 +285,7 @@ describe('Master Methods Add/Remove Seperate', function() {
         });
         
         it('Verify All', function(done) {
-            options = {sections: ['dummysectionremove1', 'dummysectionremove2', 'dummysectionfull', 'dummysectionnull']};
+            var options = {sections: ['dummysectionremove1', 'dummysectionremove2', 'dummysectionfull', 'dummysectionnull']};
             db.getMaster(testOwner, options, function(err, result) {
                 should.not.exist(err);
                 should.exist(result);
@@ -372,7 +372,7 @@ describe('Master Methods Add/Remove Together', function() {
     });
         
     it('Add/Remove', function(done) {
-        inputRecord = {
+        var inputRecord = {
             dummysectionadd1: {
                 data: 'expldataadd1',
                 metadata: 'explmetadataadd1'
