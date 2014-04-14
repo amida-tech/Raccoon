@@ -40,6 +40,65 @@ This provides a RESTful API for interaction with and access to the aggregated he
 Components Documentation
 ========================
 
+Matching Library
+----------------
+match.js
+
+This library exposes methods for matching entire health records as well as lower level methods for matching sections of health records.
+
+Example of matching entire records.
+
+```
+var fs = require('fs');
+var BlueButton = require('./lib/bluebutton.min.js');
+var match = require('./lib/match.js').match;
+
+var xml = fs.readFileSync('test/records/ccda/CCD.sample.xml', 'utf-8');
+var bb = new BlueButton(xml);
+
+//compare record to itself (should be perfect match)
+match(bb, bb);
+```
+
+This will produce following match object:
+```javascript
+{
+    "match":
+    {
+        "allergies" : [
+            { "element" : 0, "match":"duplicate" },
+            { "element" : 1, "match":"duplicate" },
+            { "element" : 2, "match":"duplicate" },
+            ...
+            }
+        ],
+        "medications" : [...],
+        "demographics" : [...]
+        ...
+    }
+}
+```
+
+Match element can be `{"match" : "duplicate"}`, `{"match" : "new"}` or `{"match" : "partial", "percent": 50}`, partial match is expressed in percents and can range from `1` to `99`. Element attribute refers to element position (index) in related section's array of master health record.
+
+```javascript
+{
+    "match":
+    {
+        "allergies" : [
+            { "match" : "duplicate", "element" : 0 },
+            { "match" : "new" },
+            { "match" : "partial", "percent" : 50, "element" : 5},
+            ...
+            }
+        ],
+        "medications" : [...],
+        "demographics" : [...]
+        ...
+    }
+}
+```
+
 Database Access
 ---------
 record.js
