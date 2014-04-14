@@ -61,7 +61,7 @@ var BlueButton = require('./lib/bluebutton.min.js');
 var match = require('./lib/match.js').match;
 
 var xml = fs.readFileSync('test/records/ccda/CCD.sample.xml', 'utf-8');
-var src_bb = dest_bb new BlueButton(xml);
+var src_bb = dest_bb = new BlueButton(xml);
 
 //compare record to itself (should be perfect match)
 match(src_bb, dest_bb);
