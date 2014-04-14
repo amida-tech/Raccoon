@@ -1,12 +1,13 @@
 language: node_js
 node_js:
-  - "0.10"
+    - "0.10"
 
 before_script:
- - npm install -g grunt-cli@0.1.x
- - npm install --quiet
+    - npm install -g grunt-cli@0.1.x
+    - npm install --quiet
 
-#services:
+services:
+    - mongodb
 
 script:
-  - grunt
+    - grunt
