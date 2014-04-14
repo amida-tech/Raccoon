@@ -41,6 +41,13 @@ describe('match.js test', function () {
 
     });
 
+    describe('sections comparison', function () {
+        it('testing matchSections method', function () {
+            //console.log(match.matchSections(bb.data["allergies"],bb.data["allergies"]));
+            expect(match.matchSections(bb.data["allergies"],bb.data["allergies"])).to.be.ok;
+        });
+    });
+
 
     describe('full record comparison', function () {
         it('testing match method', function () {
