@@ -21,24 +21,91 @@ Racoon's components
 
 Raccoon has 4 primary elements
 
-Parsing and Normalization Library.
----------
+#### 1 - Parsing and Normalization Library.
+
 This parses incoming data into a homogenous, simplified data model.  Currently, this is served by bluebutton.js; however this will be refactored into a more efficient, server-only model.
 
-Matching Library.
----------
+#### 2 - Matching Library.
+
 This takes the standardized data elements and flags probable duplicates values. New patient's records are compared against existing Master Health Record and automatically matched with result produced as all elements of a new record are flagged as duplicates, new and % of match (to be reconciled by patient in a next step).
 
-Reconciliation Interface.
----------
+#### 3 - Reconciliation Interface.
+
 This provides a RESTful API for review and evaluation of duplicates.
 
-Master Record Interface.
----------
+#### 4 - Master Record Interface.
+
 This provides a RESTful API for interaction with and access to the aggregated health record.
 
 Components Documentation
 ========================
+
+Matching Library
+----------------
+match.js
+
+This library exposes methods for matching entire health records as well as lower level methods for matching sections of health records.
+
+Document matching method
+
+```
+var match = require('./lib/match.js').match;
+match(bb_new_record, bb_master_health_record);
+```
+
+Example of matching entire records.
+
+```
+var fs = require('fs');
+var BlueButton = require('./lib/bluebutton.min.js');
+var match = require('./lib/match.js').match;
+
+var xml = fs.readFileSync('test/records/ccda/CCD.sample.xml', 'utf-8');
+var src_bb = dest_bb = new BlueButton(xml);
+
+//compare record to itself (should be perfect match)
+match(src_bb, dest_bb);
+```
+
+This will produce following match object:
+```javascript
+{
+    "match":
+    {
+        "allergies" : [
+            { "src_id" : 0, "dest_id" : 0, "match":"duplicate" },
+            { "src_id" : 1, "dest_id" : 1, "match":"duplicate" },
+            { "src_id" : 2, "dest_id" : 2, "match":"duplicate" },
+            ...
+            }
+        ],
+        "medications" : [...],
+        "demographics" : [...]
+        ...
+    }
+}
+```
+
+
+Match element can be `{"match" : "duplicate"}`, `{"match" : "new"}` or `{"match" : "partial", "percent": 50}`, partial match is expressed in percents and can range from `1` to `99`. Element attribute `dest_id` refers to element position (index) in related section's array of master health record. Element attribute `src_id` refers to element position (index) in related array of document being merged (new record).
+
+```javascript
+{
+    "match":
+    {
+        "allergies" : [
+            { "match" : "duplicate", "src_id" : 0, "dest_id": 2 },
+            { "match" : "new", "src_id" :1 },
+            { "match" : "partial", "percent" : 50, "src_id" : 2, "dest_id" : 5},
+            ...
+            }
+        ],
+        "medications" : [...],
+        "demographics" : [...]
+        ...
+    }
+}
+```
 
 Database Access
 ---------
