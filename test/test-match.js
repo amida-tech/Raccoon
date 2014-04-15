@@ -64,7 +64,6 @@ describe('match.js test', function () {
 
 
     it('testing matchSections method with two different BB.js data files', function () {
-        //expect(true).to.equal(true);
 
         for (var section in lookups.sections) {
             var name = lookups.sections[section];
@@ -72,17 +71,50 @@ describe('match.js test', function () {
 
             if (bb.hasOwnProperty(name) && bb2.hasOwnProperty(name)) {
 
-                    expect(match.matchSections(bb.data[name], bb2.data[name])).to.be.ok;
-                    //console.log(match.matchSections(bb.data[name], bb2.data[name]));
+                    var m = match.matchSections(bb.data[name], bb2.data[name]);
+
+                    for (var item in m) {
+                        expect(m[item].match).to.equal("new");
+                        expect(m[item]).to.have.property('src_id');
+                        expect(m[item]).to.not.have.property('dest_id');
+                    }
             }
         }
 
     });
 
-    describe('sections comparison', function () {
-        it('testing matchSections method', function () {
+
+    it('testing matchSections method with two same BB.js data files', function () {
+
+        for (var section in lookups.sections) {
+            var name = lookups.sections[section];
+            //console.log(">>> "+name);
+
+            if (bb.hasOwnProperty(name) && bb.hasOwnProperty(name)) {
+
+                    var m = match.matchSections(bb.data[name], bb.data[name]);
+
+                    for (var item in m) {
+                        expect(m[item].match).to.equal("duplicate");
+                        expect(m[item]).to.have.property('src_id');
+                        expect(m[item]).to.have.property('dest_id');
+                    }
+            }
+        }
+
+    });
+
+
+    describe('allergy sections comparison', function () {
+        it('testing matchSections method on two equal allergy sections', function () {
             //console.log(match.matchSections(bb.data["allergies"],bb.data["allergies"]));
-            expect(match.matchSections(bb.data["allergies"],bb.data["allergies"])).to.be.ok;
+            var m = match.matchSections(bb.data["allergies"],bb.data["allergies"]);
+
+            for (var item in m) {
+                expect(m[item].match).to.equal("duplicate");
+                expect(m[item]).to.have.property('src_id');
+                expect(m[item]).to.have.property('dest_id');
+            }
         });
     });
 
