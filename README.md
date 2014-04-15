@@ -37,6 +37,28 @@ This provides a RESTful API for review and evaluation of duplicates.
 
 This provides a RESTful API for interaction with and access to the aggregated health record.
 
+Project Roadmap (tentative)
+===============
+
+Release 0.5 (end of April, 2014)
+----------------
+
+- Uses existing bluebutton.js lib for parsing (with some fixes/improvements)
+- Matching library supports duplicate and new entries detection
+- Reconciliation UI supports duplicate and new entries reconciliation
+- Master Health Record library supports persistence to MongoDB
+- Data model for CCDA JSON representation is defined for a few sections (e.g. Allergies)
+
+Release 1.0 (end of May, 2014)
+----------------
+
+- CCDA JSON data model is fully defined as separate library with validation support
+- bluebutton.js parser is rewriten for speed and support of updated CCDA JSON data model.
+- Matching library supports % match for entries that may be possible match
+- Reconciliation UI support reconciliation of % matched entries (e.g. partial match)
+- Master Health Record library supports persistence and full validation of CCDA JSON into MongoDB
+
+
 Components Documentation
 ========================
 
