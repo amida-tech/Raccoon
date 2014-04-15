@@ -139,12 +139,51 @@ describe('Matching library (match.js) tests', function () {
     describe('Document level tests', function () {
 
         it('full record comparison of same document', function () {
-                expect(match.match(bb,bb)).to.be.ok;
+            var m = match.match(bb,bb);
+
+            expect(m).to.be.ok;
+            expect(m).to.have.property("match");
+
+            for (var section in lookups.sections) {
+                var name = lookups.sections[section];
+                //console.log(">>> "+name);
+
+                if (bb.hasOwnProperty(name)) {
+
+                    expect(m["match"]).to.have.property(name);
+
+                        for (var item in m["match"][name]) {
+                            expect(m["match"][name][item].match).to.equal("duplicate");
+                            expect(m["match"][name][item]).to.have.property('src_id');
+                            expect(m["match"][name][item]).to.have.property('dest_id');
+                        }
+                }
+            }
+
         });
 
 
         it('full record comparison of two differnt documents', function () {
-                expect(match.match(bb,bb2)).to.be.ok;
+            var m = match.match(bb,bb2);
+
+            expect(m).to.be.ok;
+            expect(m).to.have.property("match");
+
+            for (var section in lookups.sections) {
+                var name = lookups.sections[section];
+                //console.log(">>> "+name);
+
+                if (bb.hasOwnProperty(name)) {
+
+                    expect(m["match"]).to.have.property(name);
+
+                        for (var item in m["match"][name]) {
+                            expect(m["match"][name][item].match).to.equal("new");
+                            expect(m["match"][name][item]).to.have.property('src_id');
+                            expect(m["match"][name][item]).to.have.not.property('dest_id');
+                        }
+                }
+            }
         });
 
     });
