@@ -44,3 +44,151 @@ exports.allergySchema = new schema.Schema({
     reaction: Reaction,
     severity: Severity
 });
+
+var observationInterpretation = function() {
+    var p = {
+        '@codeSystem': '2.16.840.1.113883.1.11.78',
+        '@codeSystemName': 'Observation Interpretation',
+        
+        checkIntegrity: function() {
+            return this['@code'] && this['@displayName'] ? true : false;
+        }
+    };
+    Object.freeze(p);
+    
+    var f = function(spec) {
+        var r = Object.create(p);
+        r['@code'] = spec['@code'] || spec.code;
+        r['@displayName'] = spec['@displayName'] || spec.displayName;
+        Object.preventExtensions(r);
+        return r;
+    };
+    return f;
+}();
+
+var observationInterpretationArray = function() {
+    var p = {
+        push: function(spec) {
+            var e = observationInterpretation(spec);
+            var n = this.array.push(e);
+            this.defineProperty(this, n, {
+                get: function() {
+                    return this.array[n];
+                },
+                set: function(spec) {
+                    this.array[n] = observationInterpretation(spec);
+                }
+            });
+        },
+        length: function() {
+            return this.array.length;
+        },
+        checkIntegrity: function() {
+            int n = this.array.length;
+            if (n >= this.minLen) {
+                for (var i=0; i<n; ++i) {
+                    if (! this.array.checkIntegrity()) {
+                        return false;
+                    };
+                }
+                return true;
+            } else {
+                return false;
+            }
+        },
+        minLen: 0,
+    };
+    
+    var f = function() {
+        var r = Object.create(p);
+        r.array = [];
+        Object.freeze(r);
+        return r;
+    };
+    return f;
+}();
+
+var severityObservationValue = function() {
+    var p = {
+        '@xsi:type': 'CD',
+        '@codeSystem': '2.16.840.1.113883.6.96',
+        '@codeSystemName': 'SNOMED CT',
+        checkIntegrity: function() {
+            return this['@code'] && this['@displayName'] ? true : false;
+        }
+    };
+    Object.freeze(p);
+    
+    var f = function(spec) {
+        var r = Object.create(p);
+        r['@code'] = spec['@code'] || spec.code;
+        r['@displayName'] = spec['@displayName'] || spec.displayName;
+        Object.preventExtensions(r);
+        return r;
+    };
+    return f;
+}();
+
+var severityObservation = function() {
+    var p = {
+        '@classCode': 'OBS',
+        '@moodCode': 'EVN',
+        templateId: {
+            '@root': '2.16.840.1.113883.10.20.22.4.8'
+        },
+        code: {
+            '@code': 'SEV',
+            '@displayName': 'Severity Observation',
+            '@codeSystem': '2.16.840.1.113883.5.4',
+            '@codeSystemName': 'ActCode'
+        },
+        statusCode: {
+            '@code': 'completed',
+            '@displayName': 'Status Code',
+            '@codeSystem': '2.16.840.1.113883.5.14',
+            '@codeSystemName': 'ActStatus'
+        }
+    };
+    Object.freeze(p);
+    Object.freeze(p.templateId);
+    Object.freeze(p.code);
+    Object.freeze(p.statusCode);
+    
+    var f = function() {
+        var r = Object.create(p);
+        r.text = {
+            reference: {
+                '@value': null
+            }
+        };
+        Object.preventExtensions(r.text);
+        Object.preventExtensions(r.text.reference);
+        r.value = severityObservationValue();
+        r.interpretationCode = observationInterpretationArray();
+        Object.preventExtensions(r);
+        return r;
+    };
+    return f;
+}();
+
+var allergyIntoleranceObservation = function() {
+    var p = {
+        '@classCode': 'OBS',
+        '@moodCode': 'EVN',
+        templateId: {
+            '@root': '2.16.840.1.113883.10.20.22.4.7'
+        }
+    };
+    Object.freeze(p);
+    Object.freeze(p.templateId);
+    
+    var f = function() {
+        var r = Object.create(p);
+        r.severity = severityObservation();
+        Object.preventExtensions(r);
+        return r;
+    }
+    return f;
+}();
+
+
