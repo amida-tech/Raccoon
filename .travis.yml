@@ -5,6 +5,8 @@ node_js:
 before_script:
     - npm install -g grunt-cli@0.1.x
     - npm install --quiet
+    - npm install -g mocha
+    - npm install -g istanbul
 
 services:
     - mongodb
