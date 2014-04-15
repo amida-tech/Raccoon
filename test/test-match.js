@@ -1,3 +1,6 @@
+/*jshint -W117 */
+// relaxed JSHint to allow use of xit and xdescribe to disable some test cases (make them pending)
+
 var expect = require('chai').expect;
 
 var fs = require('fs');
@@ -19,79 +22,132 @@ before(function(done) {
 });
 
 
-describe('match.js test', function () {
-    it('testing compare method', function () {
-        //expect(true).to.equal(true);
-        expect(match.compare({"a":1},{"a":1})).to.have.property("match", "duplicate");
-        expect(match.compare({"a":1},{"a":2})).to.have.property("match", "new");
-    });
+describe('Matching library (match.js) tests', function () {
 
-    it('testing compare method with BB.js data', function () {
-        //expect(true).to.equal(true);
+    describe('Entries level tests', function () {
+        it('testing compare method', function () {
+            //expect(true).to.equal(true);
+            expect(match.compare({"a":1},{"a":1})).to.have.property("match", "duplicate");
+            expect(match.compare({"a":1},{"a":2})).to.have.property("match", "new");
+        });
 
-        for (var section in lookups.sections) {
-            var name = lookups.sections[section];
-            //console.log(">>> "+name);
+        it('testing compare method with BB.js data', function () {
+            //expect(true).to.equal(true);
 
-            if (bb.hasOwnProperty(name)) {
-                for (var entry in bb.data[name]){
-                    //console.log(bb.data[name][entry]);
+            for (var section in lookups.sections) {
+                var name = lookups.sections[section];
+                //console.log(">>> "+name);
 
-                    expect(match.compare(bb.data[name][entry], bb.data[name][entry])).to.have.property("match", "duplicate");
+                if (bb.hasOwnProperty(name)) {
+                    for (var entry in bb.data[name]){
+                        //console.log(bb.data[name][entry]);
+
+                        expect(match.compare(bb.data[name][entry], bb.data[name][entry])).to.have.property("match", "duplicate");
+                    }
                 }
             }
-        }
 
-    });
+        });
 
-    it('testing compare method with BB.js data (Kinsights)', function () {
-        //expect(true).to.equal(true);
+        it('testing compare method with BB.js data (Kinsights)', function () {
+            //expect(true).to.equal(true);
 
-        for (var section in lookups.sections) {
-            var name = lookups.sections[section];
-            //console.log(">>> "+name);
+            for (var section in lookups.sections) {
+                var name = lookups.sections[section];
+                //console.log(">>> "+name);
 
-            if (bb2.hasOwnProperty(name)) {
-                for (var entry in bb2.data[name]){
-                    //console.log(bb2.data[name][entry]);
+                if (bb2.hasOwnProperty(name)) {
+                    for (var entry in bb2.data[name]){
+                        //console.log(bb2.data[name][entry]);
 
-                    expect(match.compare(bb2.data[name][entry], bb2.data[name][entry])).to.have.property("match", "duplicate");
+                        expect(match.compare(bb2.data[name][entry], bb2.data[name][entry])).to.have.property("match", "duplicate");
+                    }
                 }
             }
-        }
+
+        });
+
+
 
     });
 
+    describe('Sections level tests', function () {
 
-    it('testing matchSections method with two different BB.js data files', function () {
-        //expect(true).to.equal(true);
+        it('testing matchSections method with two different BB.js data files', function () {
 
-        for (var section in lookups.sections) {
-            var name = lookups.sections[section];
-            //console.log(">>> "+name);
+            for (var section in lookups.sections) {
+                var name = lookups.sections[section];
+                //console.log(">>> "+name);
 
-            if (bb.hasOwnProperty(name) && bb2.hasOwnProperty(name)) {
+                if (bb.hasOwnProperty(name) && bb2.hasOwnProperty(name)) {
 
-                    expect(match.matchSections(bb.data[name], bb2.data[name])).to.be.ok;
-                    //console.log(match.matchSections(bb.data[name], bb2.data[name]));
+                        var m = match.matchSections(bb.data[name], bb2.data[name]);
+
+                        for (var item in m) {
+                            expect(m[item].match).to.equal("new");
+                            expect(m[item]).to.have.property('src_id');
+                            expect(m[item]).to.not.have.property('dest_id');
+                        }
+                }
             }
-        }
 
-    });
-
-    describe('sections comparison', function () {
-        it('testing matchSections method', function () {
-            //console.log(match.matchSections(bb.data["allergies"],bb.data["allergies"]));
-            expect(match.matchSections(bb.data["allergies"],bb.data["allergies"])).to.be.ok;
         });
-    });
 
 
-    describe('full record comparison', function () {
-        it('testing match method', function () {
-            expect(match.match(bb,bb)).to.be.ok;
-            expect(match.match(bb,bb2)).to.be.ok;
+        it('testing matchSections method with two same BB.js data files', function () {
+
+            for (var section in lookups.sections) {
+                var name = lookups.sections[section];
+                //console.log(">>> "+name);
+
+                if (bb.hasOwnProperty(name) && bb.hasOwnProperty(name)) {
+
+                        var m = match.matchSections(bb.data[name], bb.data[name]);
+
+                        for (var item in m) {
+                            expect(m[item].match).to.equal("duplicate");
+                            expect(m[item]).to.have.property('src_id');
+                            expect(m[item]).to.have.property('dest_id');
+                        }
+                }
+            }
+
         });
+
+
+        describe('allergy sections comparison', function () {
+            it('testing matchSections method on two equal allergy sections', function () {
+                //console.log(match.matchSections(bb.data["allergies"],bb.data["allergies"]));
+                var m = match.matchSections(bb.data["allergies"],bb.data["allergies"]);
+
+                for (var item in m) {
+                    expect(m[item].match).to.equal("duplicate");
+                    expect(m[item]).to.have.property('src_id');
+                    expect(m[item]).to.have.property('dest_id');
+                }
+            });
+        });
+
     });
+
+
+    describe('Header level tests', function () {
+
+        xit('some sophisticated header tests will be added there later', function() {});
+    });
+
+    describe('Document level tests', function () {
+
+        it('full record comparison of same document', function () {
+                expect(match.match(bb,bb)).to.be.ok;
+        });
+
+
+        it('full record comparison of two differnt documents', function () {
+                expect(match.match(bb,bb2)).to.be.ok;
+        });
+
+    });
+
 
 });

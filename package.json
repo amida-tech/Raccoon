@@ -1,6 +1,6 @@
 {
   "author": "Dmitry Kachaev and Matthew McCall",
-  "name": "Raccoon",
+  "name": "raccoon",
   "description": "Data Raccoonciliation Engine.",
   "version": "0.0.1",
   "repository": {
@@ -25,7 +25,9 @@
     "mongoose": "3.8.x",
     "jsdom": "*",
     "winston": "0.7.x",
-    "deep-equal":"*"
+    "deep-equal": "*",
+    "coveralls": "~2.10.0",
+    "mocha-lcov-reporter": "0.0.1"
   },
   "devDependencies": {
     "should": "3.1.x",
@@ -37,6 +39,8 @@
     "grunt-mocha-test": "0.8.x",
     "grunt-contrib-jshint": "0.8.x",
     "grunt-express-server": "0.4.x",
-    "grunt-contrib-watch": "0.5.x"
+    "grunt-contrib-watch": "0.5.x",
+    "grunt-coveralls" :"*",
+    "grunt-istanbul-coverage" :"*"
   }
 }
