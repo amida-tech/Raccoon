@@ -53,7 +53,7 @@ module.exports = function(grunt) {
     coveralls: {
         options: {
             // LCOV coverage file relevant to every target
-            src: 'coverage-results/lcov.info',
+            src: 'coverage/lcov.info',
 
               // When true, grunt-coveralls will only print a warning rather than
               // an error, to prevent CI builds from failing unnecessarily (e.g. if
@@ -73,7 +73,7 @@ module.exports = function(grunt) {
                     'lines': 50,
                     'functions': 50
                 },
-                dir: 'coverage',
+                dir: 'coverage/',
                 root: '.'
             }
         }
