@@ -7,10 +7,13 @@ var match = require('../lib/match.js');
 var lookups = require('../lib/lookups.js');
 
 var bb;
+var bb2;
 
 before(function(done) {
     var xml = fs.readFileSync('test/records/ccda/CCD.sample.xml', 'utf-8');
     bb = new BlueButton(xml);
+    var xml2 = fs.readFileSync('test/records/ccda/kinsights-sample-timmy.xml', 'utf-8');
+    bb2 = new BlueButton(xml2);
     //console.log(bb.data);
     done();
 });
@@ -41,6 +44,41 @@ describe('match.js test', function () {
 
     });
 
+    it('testing compare method with BB.js data (Kinsights)', function () {
+        //expect(true).to.equal(true);
+
+        for (var section in lookups.sections) {
+            var name = lookups.sections[section];
+            //console.log(">>> "+name);
+
+            if (bb2.hasOwnProperty(name)) {
+                for (var entry in bb2.data[name]){
+                    //console.log(bb2.data[name][entry]);
+
+                    expect(match.compare(bb2.data[name][entry], bb2.data[name][entry])).to.have.property("match", "duplicate");
+                }
+            }
+        }
+
+    });
+
+
+    it('testing matchSections method with two different BB.js data files', function () {
+        //expect(true).to.equal(true);
+
+        for (var section in lookups.sections) {
+            var name = lookups.sections[section];
+            //console.log(">>> "+name);
+
+            if (bb.hasOwnProperty(name) && bb2.hasOwnProperty(name)) {
+
+                    expect(match.matchSections(bb.data[name], bb2.data[name])).to.be.ok;
+                    //console.log(match.matchSections(bb.data[name], bb2.data[name]));
+            }
+        }
+
+    });
+
     describe('sections comparison', function () {
         it('testing matchSections method', function () {
             //console.log(match.matchSections(bb.data["allergies"],bb.data["allergies"]));
@@ -51,7 +89,8 @@ describe('match.js test', function () {
 
     describe('full record comparison', function () {
         it('testing match method', function () {
-            expect(true).to.equal(true);
+            expect(match.match(bb,bb)).to.be.ok;
+            expect(match.match(bb,bb2)).to.be.ok;
         });
     });
 
