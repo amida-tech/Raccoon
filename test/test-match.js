@@ -17,6 +17,8 @@ before(function(done) {
     bb = new BlueButton(xml);
     var xml2 = fs.readFileSync('test/records/ccda/kinsights-sample-timmy.xml', 'utf-8');
     bb2 = new BlueButton(xml2);
+    var xml3 = fs.readFileSync('test/records/ccda/mix_and_match.xml', 'utf-8');
+    bb3 = new BlueButton(xml3);
     //console.log(bb.data);
     done();
 });
@@ -128,6 +130,45 @@ describe('Matching library (match.js) tests', function () {
             });
         });
 
+        //TODO: this test relies on details of sample files, had to be rewritten if samples change
+        it('allergy section comparison of documents with mix and match', function () {
+            //console.log("match bb3 to bb");
+            var m = match.matchSections(bb3.data["allergies"], bb.data["allergies"]);
+            //console.log("match bb3 to bb2");
+            var m2 = match.matchSections(bb3.data["allergies"], bb2.data["allergies"]);
+
+            expect(m).to.be.ok;
+            expect(m2).to.be.ok;
+
+            //console.log(m);
+            //console.log(m2);
+
+
+            //basic sorting function for later
+            function src_sort(a,b) {
+              if (a.src_id < b.src_id) {
+                 return -1;
+             }
+              if (a.src_id > b.src_id) {
+                return 1;
+                }
+              return 0;
+            }
+
+            var mr=[ { match: 'duplicate', src_id: '0', dest_id: '0' },
+                      { match: 'duplicate', src_id: '2', dest_id: '2' },
+                      { match: 'duplicate', src_id: '1', dest_id: '1' },
+                      { match: 'new', src_id: '3' } ];
+            var mr2=[ { match: 'duplicate', src_id: '3', dest_id: '0' },
+                      { match: 'new', src_id: '1' },
+                      { match: 'new', src_id: '0' },
+                      { match: 'new', src_id: '2' } ];
+
+            //sorting arrays by src_id since order matters...
+            expect(m.sort(src_sort)).to.deep.equal(mr.sort(src_sort));
+            expect(m2.sort(src_sort)).to.deep.equal(mr2.sort(src_sort));
+        });
+
     });
 
 
@@ -185,6 +226,7 @@ describe('Matching library (match.js) tests', function () {
                 }
             }
         });
+
 
     });
 
