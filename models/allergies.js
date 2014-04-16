@@ -14,181 +14,107 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ======================================================================*/
 
-var schema = require('mongoose');
+// Simplified CCDA model.  Allergies describes what is saved to the
+// database and the specification input to the allergies constructor.  
+//
+// Code      = {code: String, displayName: String}
+// Severity  = {value: Code, interpretation: Code} 
+// Reaction  = {value: Code, severity: Severity}
+// DateRange = {start: Date, end: Date},
+// Allergen  = {code: String, displayName: String, code_system: String}
+// Allergy   = {id: [String],
+//             status: String, (code and displayName are the same)
+//             date_range: DateRange,
+//             originalText: String (optional, need more investigation),
+//             allergen: Allergen,
+//             reaction: [Reaction],
+//             severity: Severity
+// Allergies = [Allergy]
+//
 
-var Severity = exports.Severity = new scheam.Schema({
-    value: String,         // 2.16.840.1.113883.3.88.12.3221.6.8
-    interpretion: String   // 2.16.840.1.113883.1.11.78
-});
-
-var Reaction = exports.Reaction = new schema.Schema({
-    value: String,         // 2.16.840.1.113883.3.88.12.3221.7.4
-    severity: Severity
-});
-
-exports.allergySchema = new schema.Schema({
-    id: [String],
-    status: String, // needs to be abstracted to ValueSet (statusCode 2.16.840.1138883.11.20.9.19)
-    date_range: {
-        start: Date,
-        end: Date
-    },
-    // Rest is observation template which in theory can be array per act but not recommended
-    code: String,   // name, code sytem and code_system_name are constants 2.16.840.1.113883.3.88.12.32 21.6.2
-    originalText: String,
-    allergen: {
-        code: String,
-        code_system: String
-    },
-    // status: String,  meaningless      // 2.16.840.1.113883.3.88.12.80.68
-    reaction: Reaction,
-    severity: Severity
-});
-
-var observationInterpretation = function() {
-    var p = {
-        '@codeSystem': '2.16.840.1.113883.1.11.78',
-        '@codeSystemName': 'Observation Interpretation',
-        
-        checkIntegrity: function() {
-            return this['@code'] && this['@displayName'] ? true : false;
-        }
+var severity = function() {
+    var p = {};
+    p.update = function(value) {
+        this.ccda
     };
-    Object.freeze(p);
-    
-    var f = function(spec) {
-        var r = Object.create(p);
-        r['@code'] = spec['@code'] || spec.code;
-        r['@displayName'] = spec['@displayName'] || spec.displayName;
-        Object.preventExtensions(r);
-        return r;
-    };
-    return f;
+
+
 }();
 
-var observationInterpretationArray = function() {
-    var p = {
-        push: function(spec) {
-            var e = observationInterpretation(spec);
-            var n = this.array.push(e);
-            this.defineProperty(this, n, {
-                get: function() {
-                    return this.array[n];
-                },
-                set: function(spec) {
-                    this.array[n] = observationInterpretation(spec);
-                }
-            });
+exports.allergy = function() {
+    var p = {};
+    p.defineProperty(p, 'severity', {
+        set: function(value) {
+            this.ccda.severity = ccda.severityObservation(value);
         },
-        length: function() {
-            return this.array.length;
-        },
-        checkIntegrity: function() {
-            int n = this.array.length;
-            if (n >= this.minLen) {
-                for (var i=0; i<n; ++i) {
-                    if (! this.array.checkIntegrity()) {
-                        return false;
-                    };
-                }
-                return true;
+        get: function() {
+            var sev = this.ccda.severity;
+            if (sev) {
+                var r = severity(sev);
+                return r;
             } else {
-                return false;
+                return null;
             }
-        },
-        minLen: 0,
+        }
+    });
+    
+    p.getCCDA = function() {
+        return ccda;
+    };
+    
+    p.getPersistable = function() {
+        var r = {};
+        var sev = this.ccda.severity;
+        r.severity = severity(sev).getPersistable();
+        return r;
     };
     
     var f = function() {
         var r = Object.create(p);
-        r.array = [];
-        Object.freeze(r);
+        r.ccda = ccda.allergyIntoleranceObservation();
         return r;
     };
     return f;
 }();
 
-var severityObservationValue = function() {
+
+exports.allergies = (function() {
     var p = {
-        '@xsi:type': 'CD',
-        '@codeSystem': '2.16.840.1.113883.6.96',
-        '@codeSystemName': 'SNOMED CT',
-        checkIntegrity: function() {
-            return this['@code'] && this['@displayName'] ? true : false;
-        }
+       transformSpec: function(spec) {
+           if (spec) {
+               var r = [];
+               spec.forEach(function(specElem) {
+                   var newElem = [{observation: specElem}];
+                   r.push(newElem);
+               });
+               return r;
+           } else {
+               return null;
+           }
+       },
+       
+       getCCDA: function() {
+           return this.ccda;
+       }
     };
-    Object.freeze(p);
+    
+    
+    
     
     var f = function(spec) {
+        spec = transformSpec(spec);
+        var ccda = ccdaImpl.allergiesSection(spec);
+        
         var r = Object.create(p);
-        r['@code'] = spec['@code'] || spec.code;
-        r['@displayName'] = spec['@displayName'] || spec.displayName;
-        Object.preventExtensions(r);
-        return r;
-    };
-    return f;
-}();
-
-var severityObservation = function() {
-    var p = {
-        '@classCode': 'OBS',
-        '@moodCode': 'EVN',
-        templateId: {
-            '@root': '2.16.840.1.113883.10.20.22.4.8'
-        },
-        code: {
-            '@code': 'SEV',
-            '@displayName': 'Severity Observation',
-            '@codeSystem': '2.16.840.1.113883.5.4',
-            '@codeSystemName': 'ActCode'
-        },
-        statusCode: {
-            '@code': 'completed',
-            '@displayName': 'Status Code',
-            '@codeSystem': '2.16.840.1.113883.5.14',
-            '@codeSystemName': 'ActStatus'
-        }
-    };
-    Object.freeze(p);
-    Object.freeze(p.templateId);
-    Object.freeze(p.code);
-    Object.freeze(p.statusCode);
-    
-    var f = function() {
-        var r = Object.create(p);
-        r.text = {
-            reference: {
-                '@value': null
-            }
+        r.getCCDA = function() {
+            return ccda;
         };
-        Object.preventExtensions(r.text);
-        Object.preventExtensions(r.text.reference);
-        r.value = severityObservationValue();
-        r.interpretationCode = observationInterpretationArray();
-        Object.preventExtensions(r);
-        return r;
-    };
-    return f;
-}();
-
-var allergyIntoleranceObservation = function() {
-    var p = {
-        '@classCode': 'OBS',
-        '@moodCode': 'EVN',
-        templateId: {
-            '@root': '2.16.840.1.113883.10.20.22.4.7'
+        r.getPersistable = function() {
+            var n = ccda.length;
         }
+        
+        
     };
-    Object.freeze(p);
-    Object.freeze(p.templateId);
-    
-    var f = function() {
-        var r = Object.create(p);
-        r.severity = severityObservation();
-        Object.preventExtensions(r);
-        return r;
-    }
     return f;
-}();
-
+}());
 
