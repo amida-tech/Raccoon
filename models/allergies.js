@@ -33,9 +33,36 @@ limitations under the License.
 // Allergies = [Allergy]
 //
 
-var severity = exports.severity = function() {
+var tranformCode = function(spec) {
+    if (spec) {
+        return {
+            '@code': spec.code,
+            '@displayName': spec.displayName
+        };
+    } else {
+        return null;
+    }
+};
+
+var tranformCodeArray = function(spec) {
+    if (spec) {
+        var r = [];
+        spec.forEach(function(specElem) {
+            var newElem = tranformCode(specElem);
+            r.push(newElem);
+        });
+        return r;
+    } else {
+        return null;
+    }
+};
+
+var severity = exports.severity = (function() {
     var tranformSpec = function(spec) {
-        
+        return {
+            value: transformCode(spec.value),
+            interpretationCode: tranformCodeArray(spec.interpretation)
+        };
     };
 
     var p = {};
@@ -43,8 +70,15 @@ var severity = exports.severity = function() {
         this.ccda
     };
 
+    var f = function() {
+        var r = Object.create(p);
+        r.ccda = ccda.allergyIntoleranceObservation();
+        return r;
+    };
+    f.transformSpec = tranformSpec;
+    return f;
 
-}();
+}());
 
 var allergy = exports.allergy = function() {
     var tranformSpec = function(spec) {
@@ -103,22 +137,39 @@ var allergies = exports.allergies = (function() {
         }
     };
 
-    var p = {       
-       getCCDA: function() {
-           return this.ccda;
-       }
-    };
+    var getAllergy = function(ccda, index) {
+        if (ccda) {
+            var e = ccda.entry.elementAt[index];
+            if (e) {
+                var a = e.entryRelationship[0];
+                if (a && a.observation) {
+                    return allergy(a.observation, {ccda: true});
+                }
+            }
+        }
+        return null;
+    }
     
-    var f = function(spec) {
-        spec = transformSpec(spec);
-        var ccda = ccdaImpl.allergiesSection(spec);
+    var f = function(spec, options) {
+        var ccda = null;
+        if (options && option.ccda) {
+            ccda = spec;
+        } else {}
+            spec = transformSpec(spec);
+            ccda = ccdaImpl.allergiesSection(spec);
+        }
         
         var r = Object.create(p);
         r.getCCDA = function() {
             return ccda;
         };
         r.getPersistable = function() {
+            var r = [];
             var n = ccda.length;
+            if (n > 0) {
+                
+            }
+            return r;
         }
         
         
