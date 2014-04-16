@@ -4,28 +4,28 @@
       "start": "2009-09-02T04:00:00.000Z",
       "end": "2010-01-03T05:00:00.000Z"
     },
-    "name": null,
+    "name": "drug allergy",
     "code": "416098002",
-    "code_system": null,
-    "code_system_name": null,
-    "status": null,
-    "severity": null,
+    "code_system": "2.16.840.1.113883.6.96",
+    "code_system_name": "SNOMED CT",
+    "status": "Active",
+    "severity": "Moderate to severe",
     "reaction": {
-      "name": null,
+      "name": "Hives",
       "code": "247472004",
-      "code_system": null
+      "code_system": "2.16.840.1.113883.6.96"
     },
     "reaction_type": {
-      "name": null,
+      "name": "Adverse reaction to substance",
       "code": "282100009",
-      "code_system": null,
-      "code_system_name": null
+      "code_system": "2.16.840.1.113883.6.96",
+      "code_system_name": "SNOMED CT"
     },
     "allergen": {
-      "name": null,
+      "name": "ALLERGENIC EXTRACT, PENICILLIN",
       "code": "314422",
-      "code_system": null,
-      "code_system_name": null
+      "code_system": "2.16.840.1.113883.6.88",
+      "code_system_name": "RxNorm"
     }
   },
   {
@@ -33,28 +33,28 @@
       "start": "2009-09-02T04:00:00.000Z",
       "end": "2010-01-03T05:00:00.000Z"
     },
-    "name": null,
+    "name": "drug allergy",
     "code": "416098002",
-    "code_system": null,
-    "code_system_name": null,
-    "status": null,
-    "severity": null,
+    "code_system": "2.16.840.1.113883.6.96",
+    "code_system_name": "SNOMED CT",
+    "status": "Active",
+    "severity": "Moderate to severe",
     "reaction": {
-      "name": null,
+      "name": "Wheezing",
       "code": "56018004",
-      "code_system": null
+      "code_system": "2.16.840.1.113883.6.96"
     },
     "reaction_type": {
-      "name": null,
+      "name": "Adverse reaction to substance",
       "code": "282100009",
-      "code_system": null,
-      "code_system_name": null
+      "code_system": "2.16.840.1.113883.6.96",
+      "code_system_name": "SNOMED CT"
     },
     "allergen": {
-      "name": null,
+      "name": "ASPIRIN",
       "code": "R16CO5Y76E",
-      "code_system": null,
-      "code_system_name": null
+      "code_system": "2.16.840.1.113883.4.9",
+      "code_system_name": "UNII"
     }
   },
   {
@@ -62,28 +62,28 @@
       "start": "2009-09-02T04:00:00.000Z",
       "end": "2010-01-03T05:00:00.000Z"
     },
-    "name": null,
+    "name": "drug allergy",
     "code": "416098002",
-    "code_system": null,
-    "code_system_name": null,
-    "status": null,
-    "severity": null,
+    "code_system": "2.16.840.1.113883.6.96",
+    "code_system_name": "SNOMED CT",
+    "status": "Active",
+    "severity": "Moderate to severe",
     "reaction": {
-      "name": null,
+      "name": "Nausea",
       "code": "73879007",
-      "code_system": null
+      "code_system": "2.16.840.1.113883.6.96"
     },
     "reaction_type": {
-      "name": null,
+      "name": "Adverse reaction to substance",
       "code": "282100009",
-      "code_system": null,
-      "code_system_name": null
+      "code_system": "2.16.840.1.113883.6.96",
+      "code_system_name": "SNOMED CT"
     },
     "allergen": {
-      "name": null,
+      "name": "Codeine",
       "code": "Q830PW7520",
-      "code_system": null,
-      "code_system_name": null
+      "code_system": "2.16.840.1.113883.4.9",
+      "code_system_name": "UNII"
     }
   }
 ]
