@@ -17,22 +17,27 @@ limitations under the License.
 // Simplified CCDA model.  Allergies describes what is saved to the
 // database and the specification input to the allergies constructor.  
 //
-// Code      = {code: String, displayName: String}
-// Severity  = {value: Code, interpretation: Code} 
-// Reaction  = {value: Code, severity: Severity}
-// DateRange = {start: Date, end: Date},
-// Allergen  = {code: String, displayName: String, code_system: String}
-// Allergy   = {id: [String],
-//             status: String, (code and displayName are the same)
-//             date_range: DateRange,
-//             originalText: String (optional, need more investigation),
-//             allergen: Allergen,
-//             reaction: [Reaction],
-//             severity: Severity
+// Code           = {code: String, displayName: String}
+// Interpretation = [Code],
+// Severity       = {value: Code, interpretation: Interpretation} 
+// Reaction       = {value: Code, severity: Severity}
+// DateRange      = {start: Date, end: Date},
+// Allergen       = {code: String, displayName: String, code_system: String}
+// Allergy        = {id: [String],
+//                  status: String, (code and displayName are the same)
+//                  date_range: DateRange,
+//                  originalText: String (optional, need more investigation),
+//                  allergen: Allergen,
+//                  reaction: [Reaction],
+//                  severity: Severity}
 // Allergies = [Allergy]
 //
 
-var severity = function() {
+var severity = exports.severity = function() {
+    var tranformSpec = function(spec) {
+        
+    };
+
     var p = {};
     p.update = function(value) {
         this.ccda
@@ -41,7 +46,11 @@ var severity = function() {
 
 }();
 
-exports.allergy = function() {
+var allergy = exports.allergy = function() {
+    var tranformSpec = function(spec) {
+        
+    };
+    
     var p = {};
     p.defineProperty(p, 'severity', {
         set: function(value) {
@@ -74,32 +83,31 @@ exports.allergy = function() {
         r.ccda = ccda.allergyIntoleranceObservation();
         return r;
     };
+    f.transformSpec = tranformSpec;
     return f;
 }();
 
 
-exports.allergies = (function() {
-    var p = {
-       transformSpec: function(spec) {
-           if (spec) {
-               var r = [];
-               spec.forEach(function(specElem) {
-                   var newElem = [{observation: specElem}];
-                   r.push(newElem);
-               });
-               return r;
-           } else {
-               return null;
-           }
-       },
-       
+var allergies = exports.allergies = (function() {
+    var transformSpec = function(spec) {
+        if (spec) {
+            var r = [];
+            spec.forEach(function(specElem) {
+                specElem = allergy.tranformSpec(specElem);
+                var newElem = [{observation: specElem}];
+                r.push(newElem);
+            });
+            return r;
+        } else {
+            return null;
+        }
+    };
+
+    var p = {       
        getCCDA: function() {
            return this.ccda;
        }
     };
-    
-    
-    
     
     var f = function(spec) {
         spec = transformSpec(spec);

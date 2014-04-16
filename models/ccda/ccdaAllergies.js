@@ -120,10 +120,7 @@ var severityObservation = function() {
             '@codeSystemName': 'ActStatus'
         }
     };
-    Object.freeze(p);
-    Object.freeze(p.templateId);
-    Object.freeze(p.code);
-    Object.freeze(p.statusCode);
+    jsutil.deepFreeze(p);
     
     var f = function() {
         var r = Object.create(p);
