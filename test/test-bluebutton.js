@@ -44,7 +44,7 @@ var getDeepProperties = function(obj, root) {
 describe('bluebutton.js', function () {
     it ('helper method sanity check', function(done) {
         var a = {prop1: 1, prop2: {x:2, y:3}};
-        props = getDeepProperties(a);
+        var props = getDeepProperties(a);
         expect(props).to.have.length(4);
         props.forEach(function(prop) {
             expect(a).to.have.deep.property(prop);
@@ -69,23 +69,23 @@ describe('bluebutton.js', function () {
             var allergies = null;
 
             before(function(done) {
-                bb = readBBFile('test/records/ccda/CCD_demo1.xml');
+                var bb = readBBFile('test/records/ccda/CCD_demo1.xml');
                 allergies = bb.allergies();
                 done();
             });
 
             it('expected properties', function(done) {
                 expect(allergies).to.have.length(3);
-                schema = allergiesModel.schema;
-                schemaClone = _.clone(schema);
+                var schema = allergiesModel.schema;
+                var schemaClone = _.clone(schema);
                 delete schemaClone.metadata;
-                schemaProps = getDeepProperties(schemaClone);
+                var schemaProps = getDeepProperties(schemaClone);
                 expect(schemaProps).to.have.length.above(0);
                 allergies.forEach(function(allergy) {
                     schemaProps.forEach(function(schemaProp) {
                         expect(allergy).to.have.deep.property(schemaProp);
                     });
-                    props = getDeepProperties(allergy);
+                    var props = getDeepProperties(allergy);
                     props.forEach(function(prop) {
                         expect(schema).to.have.deep.property(prop);
                     });
@@ -99,7 +99,7 @@ describe('bluebutton.js', function () {
             it('no nulls', function(done) {
                 expect(allergies).to.have.length(3);
                 allergies.forEach(function(allergy) {
-                    props = getDeepProperties(allergy);
+                    var props = getDeepProperties(allergy);
                     props.forEach(function(prop) {
                         expect(allergy).to.have.deep.property(prop).that.exist;
                     });
