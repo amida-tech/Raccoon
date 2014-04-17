@@ -31,6 +31,10 @@ describe('Matching library (match.js) tests', function () {
             //expect(true).to.equal(true);
             expect(match.compare({"a":1},{"a":1})).to.have.property("match", "duplicate");
             expect(match.compare({"a":1},{"a":2})).to.have.property("match", "new");
+
+            //check that order doesnt matter
+            expect(match.compare({"a":1, "b": 2},{"b":2, "a":1})).to.have.property("match", "duplicate");
+
         });
 
         it('testing compare method with BB.js data', function () {
