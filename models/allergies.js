@@ -14,166 +14,32 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ======================================================================*/
 
-// Simplified CCDA model.  Allergies describes what is saved to the
-// database and the specification input to the allergies constructor.  
-//
-// Code           = {code: String, displayName: String}
-// Interpretation = [Code],
-// Severity       = {value: Code, interpretation: Interpretation} 
-// Reaction       = {value: Code, severity: Severity}
-// DateRange      = {start: Date, end: Date},
-// Allergen       = {code: String, displayName: String, code_system: String}
-// Allergy        = {id: [String],
-//                  status: String, (code and displayName are the same)
-//                  date_range: DateRange,
-//                  originalText: String (optional, need more investigation),
-//                  allergen: Allergen,
-//                  reaction: [Reaction],
-//                  severity: Severity}
-// Allergies = [Allergy]
-//
+var mongoose = require('mongoose');
+var ObjectID = mongoose.ObjectId; 
 
-var tranformCode = function(spec) {
-    if (spec) {
-        return {
-            '@code': spec.code,
-            '@displayName': spec.displayName
-        };
-    } else {
-        return null;
+var schema = exports.schema = {
+    metadata: {
+        attribution: [{
+            record_id: ObjectId,
+            attributed: Date,
+            attribution: String
+        }]
+    },
+    date_range: {
+        start: Date,
+        end: Date
+    },
+    
+    name: String,
+    code: String,
+    code_system: String,
+    code_system_name: String,
+    status: String,
+    severity: String,
+    reaction: {
+        name: String,
+        code: String,
+        code_system: String
     }
 };
-
-var tranformCodeArray = function(spec) {
-    if (spec) {
-        var r = [];
-        spec.forEach(function(specElem) {
-            var newElem = tranformCode(specElem);
-            r.push(newElem);
-        });
-        return r;
-    } else {
-        return null;
-    }
-};
-
-var severity = exports.severity = (function() {
-    var tranformSpec = function(spec) {
-        return {
-            value: transformCode(spec.value),
-            interpretationCode: tranformCodeArray(spec.interpretation)
-        };
-    };
-
-    var p = {};
-    p.update = function(value) {
-        this.ccda
-    };
-
-    var f = function() {
-        var r = Object.create(p);
-        r.ccda = ccda.allergyIntoleranceObservation();
-        return r;
-    };
-    f.transformSpec = tranformSpec;
-    return f;
-
-}());
-
-var allergy = exports.allergy = function() {
-    var tranformSpec = function(spec) {
-        
-    };
-    
-    var p = {};
-    p.defineProperty(p, 'severity', {
-        set: function(value) {
-            this.ccda.severity = ccda.severityObservation(value);
-        },
-        get: function() {
-            var sev = this.ccda.severity;
-            if (sev) {
-                var r = severity(sev);
-                return r;
-            } else {
-                return null;
-            }
-        }
-    });
-    
-    p.getCCDA = function() {
-        return ccda;
-    };
-    
-    p.getPersistable = function() {
-        var r = {};
-        var sev = this.ccda.severity;
-        r.severity = severity(sev).getPersistable();
-        return r;
-    };
-    
-    var f = function() {
-        var r = Object.create(p);
-        r.ccda = ccda.allergyIntoleranceObservation();
-        return r;
-    };
-    f.transformSpec = tranformSpec;
-    return f;
-}();
-
-
-var allergies = exports.allergies = (function() {
-    var transformSpec = function(spec) {
-        if (spec) {
-            var r = [];
-            spec.forEach(function(specElem) {
-                specElem = allergy.tranformSpec(specElem);
-                var newElem = [{observation: specElem}];
-                r.push(newElem);
-            });
-            return r;
-        } else {
-            return null;
-        }
-    };
-
-    var getAllergy = function(ccda, index) {
-        if (ccda) {
-            var e = ccda.entry.elementAt[index];
-            if (e) {
-                var a = e.entryRelationship[0];
-                if (a && a.observation) {
-                    return allergy(a.observation, {ccda: true});
-                }
-            }
-        }
-        return null;
-    }
-    
-    var f = function(spec, options) {
-        var ccda = null;
-        if (options && option.ccda) {
-            ccda = spec;
-        } else {}
-            spec = transformSpec(spec);
-            ccda = ccdaImpl.allergiesSection(spec);
-        }
-        
-        var r = Object.create(p);
-        r.getCCDA = function() {
-            return ccda;
-        };
-        r.getPersistable = function() {
-            var r = [];
-            var n = ccda.length;
-            if (n > 0) {
-                
-            }
-            return r;
-        }
-        
-        
-    };
-    return f;
-}());
 
