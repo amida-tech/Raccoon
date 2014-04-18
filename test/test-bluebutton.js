@@ -137,7 +137,7 @@ describe('bluebutton.js', function () {
                 done();
             });
 
-            it('no nulls', function(done) {
+            it('no nulls except date_range.end', function(done) {
                 expect(allergies).to.have.length(5);
                 allergies.forEach(function(allergy) {
                     var props = getDeepProperties(allergy);
@@ -150,6 +150,63 @@ describe('bluebutton.js', function () {
                 });
                 done();
             });
-        });    
+        });
+        
+        describe('CCD_demo3.xml', function() {
+            var allergies = null;
+
+            before(function(done) {
+                var bb = readBBFile('test/records/ccda/CCD_demo3.xml');
+                allergies = bb.allergies();
+                done();
+            });
+
+            it('expected properties', function(done) {
+                expect(allergies).to.have.length(5);
+                checkSchemaConformance(allergies);
+                done();
+            });
+
+            it('no nulls except date_range.end', function(done) {
+                expect(allergies).to.have.length(5);
+                allergies.forEach(function(allergy) {
+                    var props = getDeepProperties(allergy);
+                    // Ignore date_range.end for now, it can be null
+                    var index = props.indexOf('date_range.end');
+                    props.splice(index, 1);
+                    props.forEach(function(prop) {
+                        expect(allergy).to.have.deep.property(prop).that.exist;
+                    });
+                });
+                done();
+            });
+            
+            it('eggs severity Mild to moderate', function(done) {
+                var eggs = null;
+                allergies.forEach(function(allergy) {
+                    if (allergy.name === 'Eggs') {
+                        eggs = allergy;
+                    }
+                });
+                expect(eggs).to.exist;
+                expect(eggs.severity).to.equal('Mild to moderate');
+                done();
+            });
+            
+            it('Neomycin Sulfate 500 MG start Aug 26 to Aug 29', function(done) {
+                var neomycin = null;
+                allergies.forEach(function(allergy) {
+                    if (allergy.name === 'Neomycin Sulfate 500 MG') {
+                        neomycin = allergy;
+                    }
+                });
+                expect(neomycin).to.exist;
+                expect(neomycin.date_range).to.exist;
+                expect(neomycin.date_range.start).to.exist;
+                expect(neomycin.date_range.start.toString()).to.have.string('Aug 29');
+                done();
+            });
+        });
+
     });
 });
