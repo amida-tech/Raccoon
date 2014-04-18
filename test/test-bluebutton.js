@@ -23,7 +23,7 @@ var fs = require('fs');
 var BlueButton = require('../lib/bluebutton.min.js');
 
 var readBBFile = function(filePath) {
-    var xml = fs.readFileSync('test/records/ccda/CCD.sample.xml', 'utf-8');
+    var xml = fs.readFileSync(filePath, 'utf-8');
     var bb = new BlueButton(xml);
     return bb;
 };
@@ -39,6 +39,10 @@ var getDeepProperties = function(obj, root) {
         }
     });
     return result;
+};
+
+var checkSchemaConformance = function(section, schema) {
+    
 };
 
 describe('bluebutton.js', function () {
@@ -65,6 +69,32 @@ describe('bluebutton.js', function () {
     });
     
     describe('allergies', function() {
+        var schemaProps = null;
+        var schema = allergiesModel.schema;
+
+        var checkSchemaConformance = function(allergies) {
+            expect(schemaProps).to.have.length.above(0);
+            allergies.forEach(function(allergy) {
+                schemaProps.forEach(function(schemaProp) {
+                    expect(allergy).to.have.deep.property(schemaProp);
+                });
+                var props = getDeepProperties(allergy);
+                props.forEach(function(prop) {
+                    expect(schema).to.have.deep.property(prop);
+                });
+                // sanity
+                expect(allergy).not.to.have.property('xxxxx');
+                expect(allergy).not.to.have.deep.property('reaction.xxxx');
+            });            
+        };
+
+        before(function(done) {
+            var schemaClone = _.clone(schema);
+            delete schemaClone.metadata;
+            schemaProps = getDeepProperties(schemaClone);
+            done();
+        });
+
         describe('CCD_demo1.xml', function() {
             var allergies = null;
 
@@ -76,23 +106,7 @@ describe('bluebutton.js', function () {
 
             it('expected properties', function(done) {
                 expect(allergies).to.have.length(3);
-                var schema = allergiesModel.schema;
-                var schemaClone = _.clone(schema);
-                delete schemaClone.metadata;
-                var schemaProps = getDeepProperties(schemaClone);
-                expect(schemaProps).to.have.length.above(0);
-                allergies.forEach(function(allergy) {
-                    schemaProps.forEach(function(schemaProp) {
-                        expect(allergy).to.have.deep.property(schemaProp);
-                    });
-                    var props = getDeepProperties(allergy);
-                    props.forEach(function(prop) {
-                        expect(schema).to.have.deep.property(prop);
-                    });
-                    // sanity
-                    expect(allergy).not.to.have.property('xxxxx');
-                    expect(allergy).not.to.have.deep.property('reaction.xxxx');
-                });
+                checkSchemaConformance(allergies);
                 done();
             });
 
@@ -107,5 +121,35 @@ describe('bluebutton.js', function () {
                 done();
             });
         });
+        
+        describe('CCD_demo2.xml', function() {
+            var allergies = null;
+
+            before(function(done) {
+                var bb = readBBFile('test/records/ccda/CCD_demo2.xml');
+                allergies = bb.allergies();
+                done();
+            });
+
+            it('expected properties', function(done) {
+                expect(allergies).to.have.length(5);
+                checkSchemaConformance(allergies);
+                done();
+            });
+
+            it('no nulls', function(done) {
+                expect(allergies).to.have.length(5);
+                allergies.forEach(function(allergy) {
+                    var props = getDeepProperties(allergy);
+                    // Ignore date_range.end for now, it can be null
+                    var index = props.indexOf('date_range.end');
+                    props.splice(index, 1);
+                    props.forEach(function(prop) {
+                        expect(allergy).to.have.deep.property(prop).that.exist;
+                    });
+                });
+                done();
+            });
+        });    
     });
 });
