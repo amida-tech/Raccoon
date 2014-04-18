@@ -14,33 +14,32 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ======================================================================*/
 
-var schema = require('mongoose');
+var mongoose = require('mongoose');
+var ObjectId = mongoose.ObjectId; 
 
-var Severity = exports.Severity = new scheam.Schema({
-    value: String,         // 2.16.840.1.113883.3.88.12.3221.6.8
-    interpretion: String   // 2.16.840.1.113883.1.11.78
-});
-
-var Reaction = exports.Reaction = new schema.Schema({
-    value: String,         // 2.16.840.1.113883.3.88.12.3221.7.4
-    severity: Severity
-});
-
-exports.allergySchema = new schema.Schema({
-    id: [String],
-    status: String, // needs to be abstracted to ValueSet (statusCode 2.16.840.1138883.11.20.9.19)
+var schema = exports.schema = {
+    metadata: {
+        attribution: [{
+            record_id: ObjectId,
+            attributed: Date,
+            attribution: String
+        }]
+    },
     date_range: {
         start: Date,
         end: Date
     },
-    // Rest is observation template which in theory can be array per act but not recommended
-    code: String,   // name, code sytem and code_system_name are constants 2.16.840.1.113883.3.88.12.32 21.6.2
-    originalText: String,
-    allergen: {
+    
+    name: String,
+    code: String,
+    code_system: String,
+    code_system_name: String,
+    status: String,
+    severity: String,
+    reaction: {
+        name: String,
         code: String,
         code_system: String
-    },
-    // status: String,  meaningless      // 2.16.840.1.113883.3.88.12.80.68
-    reaction: Reaction,
-    severity: Severity
-});
+    }
+};
+
