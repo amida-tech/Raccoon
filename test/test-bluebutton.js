@@ -123,7 +123,6 @@ describe('bluebutton.js', function () {
             before(function(done) {
                 var bb = readBBFile('test/records/ccda/CCD_demo2.xml');
                 allergies = bb.allergies();
-                console.log(allergies);
                 done();
             });
 
