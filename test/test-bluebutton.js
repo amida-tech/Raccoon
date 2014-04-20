@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ======================================================================*/
 
-var should = require('should');
 var _ = require('underscore');
 var allergiesModel = require('../models/allergies');
 var expect = require('chai').expect;
@@ -124,6 +123,7 @@ describe('bluebutton.js', function () {
             before(function(done) {
                 var bb = readBBFile('test/records/ccda/CCD_demo2.xml');
                 allergies = bb.allergies();
+                console.log(allergies);
                 done();
             });
 

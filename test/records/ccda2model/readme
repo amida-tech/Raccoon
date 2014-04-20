@@ -1,0 +1,2 @@
+This directory includes CCDA snippets to demonstrate/document how the parser converts CCDA files to Raccoon models.
+Associated tests are in test-ccda2model.js.
