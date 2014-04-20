@@ -13,11 +13,11 @@ var bb;
 var bb2;
 
 before(function(done) {
-    var xml = fs.readFileSync('test/records/ccda/CCD.sample.xml', 'utf-8');
+    var xml = fs.readFileSync('test/records/ccda/CCD_demo1.xml', 'utf-8');
     bb = new BlueButton(xml);
     var xml2 = fs.readFileSync('test/records/ccda/kinsights-sample-timmy.xml', 'utf-8');
     bb2 = new BlueButton(xml2);
-    var xml3 = fs.readFileSync('test/records/ccda/mix_and_match.xml', 'utf-8');
+    var xml3 = fs.readFileSync('test/records/ccda/CCD_demo3.xml', 'utf-8');
     bb3 = new BlueButton(xml3);
     //console.log(bb.data);
     done();
@@ -31,6 +31,10 @@ describe('Matching library (match.js) tests', function () {
             //expect(true).to.equal(true);
             expect(match.compare({"a":1},{"a":1})).to.have.property("match", "duplicate");
             expect(match.compare({"a":1},{"a":2})).to.have.property("match", "new");
+
+            //check that order doesnt matter
+            expect(match.compare({"a":1, "b": 2},{"b":2, "a":1})).to.have.property("match", "duplicate");
+
         });
 
         it('testing compare method with BB.js data', function () {
@@ -140,8 +144,8 @@ describe('Matching library (match.js) tests', function () {
             expect(m).to.be.ok;
             expect(m2).to.be.ok;
 
-            //console.log(m);
-            //console.log(m2);
+            console.log(m);
+            console.log(m2);
 
 
             //basic sorting function for later
@@ -155,14 +159,18 @@ describe('Matching library (match.js) tests', function () {
               return 0;
             }
 
+
+
             var mr=[ { match: 'duplicate', src_id: '0', dest_id: '0' },
-                      { match: 'duplicate', src_id: '2', dest_id: '2' },
                       { match: 'duplicate', src_id: '1', dest_id: '1' },
-                      { match: 'new', src_id: '3' } ];
-            var mr2=[ { match: 'duplicate', src_id: '3', dest_id: '0' },
+                      { match: 'duplicate', src_id: '3', dest_id: '2' },
+                      { match: 'new', src_id: '2' },
+                      { match: 'new', src_id: '4' } ];
+            var mr2=[ { match: 'new', src_id: '0' },
                       { match: 'new', src_id: '1' },
-                      { match: 'new', src_id: '0' },
-                      { match: 'new', src_id: '2' } ];
+                      { match: 'new', src_id: '2' },
+                      { match: 'new', src_id: '3' },
+                      { match: 'new', src_id: '4' } ] ;
 
             //sorting arrays by src_id since order matters...
             expect(m.sort(src_sort)).to.deep.equal(mr.sort(src_sort));
