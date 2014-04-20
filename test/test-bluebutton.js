@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ======================================================================*/
 
-var should = require('should');
 var _ = require('underscore');
 var allergiesModel = require('../models/allergies');
 var expect = require('chai').expect;
