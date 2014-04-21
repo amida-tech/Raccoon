@@ -150,7 +150,41 @@ describe('ccda to models logic', function() {
                     expect(allergy.date_range.end).to.be.a('null');
                 }
                 done();
-            });        
+            });
         });
     });
+    
+    describe('severity', function() {
+        var allergies = null;
+        
+        before(function(done) {
+            var bb = readBBFile('test/records/ccda2model/allergySeverity.xml');
+            allergies = bb.allergies();
+            done();
+        });
+        
+        it('on reaction and main body, different', function(done) {
+            expect(allergies).to.have.length.above(0);
+            var allergy = allergies[0];
+            expect(allergy).to.exist;
+            expect(allergy.severity).to.equal('Mild');
+            done();
+        });
+        
+        it('no severity', function(done) {
+            expect(allergies).to.have.length.above(1);
+            var allergy = allergies[1];
+            expect(allergy).to.exist;
+            expect(allergy.severity).to.equal(null);
+            done();
+        });
+        
+        it('severity from main body, no reaction severity', function(done) {
+            expect(allergies).to.have.length.above(2);
+            var allergy = allergies[2];
+            expect(allergy).to.exist;
+            expect(allergy.severity).to.equal('Moderate to severe');
+            done();
+        });
+   });
 });
