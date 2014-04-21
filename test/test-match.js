@@ -18,14 +18,14 @@ var bb2;
 
 before(function(done) {
     var xml = fs.readFileSync('test/records/ccda/CCD_demo1.xml', 'utf-8');
-    bb = new BlueButton(xml);
+    bb = new BlueButton(xml).data;
     var xml2 = fs.readFileSync('test/records/ccda/CCD_demo2.xml', 'utf-8');
-    bb2 = new BlueButton(xml2);
+    bb2 = new BlueButton(xml2).data;
     var xml3 = fs.readFileSync('test/records/ccda/CCD_demo3.xml', 'utf-8');
-    bb3 = new BlueButton(xml3);
+    bb3 = new BlueButton(xml3).data;
 
     var xml4 = fs.readFileSync('test/records/ccda/kinsights-sample-timmy.xml', 'utf-8');
-    bb4 = new BlueButton(xml4);
+    bb4 = new BlueButton(xml4).data;
 
     //console.log(bb.data);
     done();

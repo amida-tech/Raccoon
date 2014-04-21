@@ -79,8 +79,8 @@ var Match = require('../lib/match.js');
 //Create matching object
 var match = new Match(compare);
 
-// Use matching object for comparing two BB JSON documents
-var m = match.match(bb_new_record, bb_master_health_record);
+// Use matching object for comparing two BB JSON documents (only data portion of it!)
+var m = match.match(bb_new_record.data, bb_master_health_record.data);
 
 
 ```
@@ -100,7 +100,7 @@ var src_bb = dest_bb = new BlueButton(xml);
 var match = new Match(compare);
 
 //compare record to itself (should be perfect match)
-var m = match.match(src_bb, dest_bb);
+var m = match.match(src_bb.data, dest_bb.data);
 
 ```
 
