@@ -30,6 +30,20 @@ before(function(done) {
 
 describe('Matching library (compare.js) tests', function () {
 
+    describe('Exceptions test', function () {
+        it('testing exceptions', function () {
+            var fn = function(){ compare({"a":1},{"a":1},{"a":1}); };
+            expect(fn).to.throw('two arguments are required for compare function');
+
+            fn = function(){ compare({"a":1}); };
+            expect(fn).to.throw('two arguments are required for compare function');
+
+            fn = function(){ compare(); };
+            expect(fn).to.throw('two arguments are required for compare function');
+
+        });
+    });
+
     describe('Entries level tests', function () {
         it('testing compare method', function () {
             //expect(true).to.equal(true);

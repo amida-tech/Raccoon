@@ -30,6 +30,16 @@ before(function(done) {
 
 describe('Matching library (compare-partial.js) tests', function () {
 
+    describe('Exceptions test', function () {
+        it('testing exceptions', function () {
+            var fn = function(){ compare("none", "none")({"a":1},{"a":1}); };
+            expect(fn).to.throw('one argument is required for compare function');
+            fn = function(){ compare()({"a":1},{"a":1}); };
+            expect(fn).to.throw('one argument is required for compare function');
+
+        });
+    });
+
     describe('Entries level tests', function () {
         it('testing compare method', function () {
 
