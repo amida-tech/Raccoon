@@ -14,7 +14,7 @@ var equal = require('deep-equal');
 var matchSections = new Match(compare).matchSections;
 
 var bb;
-var bb2;
+var bb2, bb3,bb4;
 
 before(function(done) {
     var xml = fs.readFileSync('test/records/ccda/CCD_demo1.xml', 'utf-8');
