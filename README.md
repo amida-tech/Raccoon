@@ -72,8 +72,17 @@ This library exposes methods for matching entire health records as well as lower
 Document matching method
 
 ```
-var match = require('./lib/match.js').match;
-match(bb_new_record, bb_master_health_record);
+//Loading libraries
+var compare = require('../lib/match/compare-partial.js').compare;
+var Match = require('../lib/match.js');
+
+//Create matching object
+var match = new Match(compare);
+
+// Use matching object for comparing two BB JSON documents
+var m = match.match(bb_new_record, bb_master_health_record);
+
+
 ```
 
 Example of matching entire records.
@@ -81,13 +90,18 @@ Example of matching entire records.
 ```
 var fs = require('fs');
 var BlueButton = require('./lib/bluebutton.min.js');
-var match = require('./lib/match.js').match;
+var Match = require('../lib/match.js');
+var compare = require('../lib/match/compare-partial.js').compare;
 
 var xml = fs.readFileSync('test/records/ccda/CCD.sample.xml', 'utf-8');
 var src_bb = dest_bb = new BlueButton(xml);
 
+//Create matching object, initialized with comparison library (supporting partial match)
+var match = new Match(compare);
+
 //compare record to itself (should be perfect match)
-match(src_bb, dest_bb);
+var m = match.match(src_bb, dest_bb);
+
 ```
 
 This will produce following match object:
