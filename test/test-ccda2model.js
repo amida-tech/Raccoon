@@ -152,65 +152,100 @@ describe('ccda to models logic', function() {
                 done();
             });
         });
-    });
     
-    describe('severity', function() {
-        var allergies = null;
-        
-        before(function(done) {
-            var bb = readBBFile('test/records/ccda2model/allergySeverity.xml');
-            allergies = bb.allergies();
-            done();
+        describe('severity', function() {
+            var allergies = null;
+            
+            before(function(done) {
+                var bb = readBBFile('test/records/ccda2model/allergySeverity.xml');
+                allergies = bb.allergies();
+                done();
+            });
+            
+            it('on reaction and main body, different', function(done) {
+                expect(allergies).to.have.length.above(0);
+                var allergy = allergies[0];
+                expect(allergy).to.exist;
+                expect(allergy.severity).to.equal('Mild');
+                done();
+            });
+            
+            it('no severity', function(done) {
+                expect(allergies).to.have.length.above(1);
+                var allergy = allergies[1];
+                expect(allergy).to.exist;
+                expect(allergy.severity).to.equal(null);
+                done();
+            });
+            
+            it('severity from main body, no reaction severity', function(done) {
+                expect(allergies).to.have.length.above(2);
+                var allergy = allergies[2];
+                expect(allergy).to.exist;
+                expect(allergy.severity).to.equal('Moderate to severe');
+                done();
+            });
         });
         
-        it('on reaction and main body, different', function(done) {
-            expect(allergies).to.have.length.above(0);
-            var allergy = allergies[0];
-            expect(allergy).to.exist;
-            expect(allergy.severity).to.equal('Mild');
-            done();
+        describe('status', function() {
+            var allergies = null;
+            
+            before(function(done) {
+                var bb = readBBFile('test/records/ccda2model/allergyStatus.xml');
+                allergies = bb.allergies();
+                done();
+            });
+            
+            it('status observation exists, problem act ignored', function(done) {
+                expect(allergies).to.have.length.above(0);
+                var allergy = allergies[0];
+                expect(allergy).to.exist;
+                expect(allergy.status).to.equal('Inactive');
+                done();
+            });
+            
+            it('status observation missing, problem act ignored', function(done) {
+                expect(allergies).to.have.length.above(1);
+                var allergy = allergies[1];
+                expect(allergy).to.exist;
+                expect(allergy.status).to.equal(null);
+                done();
+            });
         });
-        
-        it('no severity', function(done) {
-            expect(allergies).to.have.length.above(1);
-            var allergy = allergies[1];
-            expect(allergy).to.exist;
-            expect(allergy.severity).to.equal(null);
-            done();
-        });
-        
-        it('severity from main body, no reaction severity', function(done) {
-            expect(allergies).to.have.length.above(2);
-            var allergy = allergies[2];
-            expect(allergy).to.exist;
-            expect(allergy.severity).to.equal('Moderate to severe');
-            done();
-        });
-    });
     
-    describe('status', function() {
-        var allergies = null;
-        
-        before(function(done) {
-            var bb = readBBFile('test/records/ccda2model/allergyStatus.xml');
-            allergies = bb.allergies();
-            done();
-        });
-        
-        it('status observation exists, problem act ignored', function(done) {
-            expect(allergies).to.have.length.above(0);
-            var allergy = allergies[0];
-            expect(allergy).to.exist;
-            expect(allergy.status).to.equal('Inactive');
-            done();
-        });
-        
-        it('status observation missing, problem act ignored', function(done) {
-            expect(allergies).to.have.length.above(1);
-            var allergy = allergies[1];
-            expect(allergy).to.exist;
-            expect(allergy.status).to.equal(null);
-            done();
+        describe('reaction', function() {
+            var allergies = null;
+            
+            before(function(done) {
+                var bb = readBBFile('test/records/ccda2model/allergyReaction.xml');
+                allergies = bb.allergies();
+                done();
+            });
+            
+            it('reaction exists, populates severity as well', function(done) {
+                expect(allergies).to.have.length.above(0);
+                var allergy = allergies[0];
+                expect(allergy).to.exist;
+                expect(allergy.reaction).to.exist;
+                expect(allergy.reaction.name).to.equal('Nausea');
+                expect(allergy.reaction.code).to.equal("422587007");
+                expect(allergy.reaction.code_system).to.equal("2.16.840.1.113883.6.96");
+                expect(allergy.severity).to.equal("Mild");
+                done();
+            });
+            
+            it('reaction value nullFlavor, reaction missing', function(done) {
+                expect(allergies).to.have.length.above(2);
+                for (var i=1; i<3; ++i) {
+                    var allergy = allergies[i];
+                    expect(allergy).to.exist;
+                    expect(allergy.reaction).to.exist;
+                    expect(allergy.reaction.name).to.equal(null);
+                    expect(allergy.reaction.code).to.equal(null);
+                    expect(allergy.reaction.code_system).to.equal(null);
+               }
+                done();
+            });
         });
     });
 });
