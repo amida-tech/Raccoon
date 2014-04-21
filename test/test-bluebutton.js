@@ -145,6 +145,32 @@ describe('bluebutton.js', function () {
                 });
                 done();
             });
+            
+            it('eggs severity Mild', function(done) {
+                var eggs = null;
+                allergies.forEach(function(allergy) {
+                    if (allergy.name === 'Eggs') {
+                        eggs = allergy;
+                    }
+                });
+                expect(eggs).to.exist;
+                expect(eggs.severity).to.equal('Mild');
+                done();
+            });
+            
+            it('Neomycin Sulfate 500 MG start Aug 26', function(done) {
+                var neomycin = null;
+                allergies.forEach(function(allergy) {
+                    if (allergy.name === 'Neomycin Sulfate 500 MG') {
+                        neomycin = allergy;
+                    }
+                });
+                expect(neomycin).to.exist;
+                expect(neomycin.date_range).to.exist;
+                expect(neomycin.date_range.start).to.exist;
+                expect(neomycin.date_range.start.toString()).to.have.string('Aug 26');
+                done();
+            });
         });
         
         describe('CCD_demo3.xml', function() {
