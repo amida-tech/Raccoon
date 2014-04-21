@@ -246,6 +246,17 @@ describe('ccda to models logic', function() {
                }
                 done();
             });
+            
+            it('multiple reaction exist, only first one populated', function(done) {
+                expect(allergies).to.have.length.above(3);
+                var allergy = allergies[3];
+                expect(allergy).to.exist;
+                expect(allergy.reaction).to.exist;
+                expect(allergy.reaction.name).to.equal("Skin Rashes/Hives");
+                expect(allergy.reaction.code).to.equal("64144002");
+                expect(allergy.reaction.code_system).to.equal("2.16.840.1.113883.6.96");
+                done();
+            });
         });
     });
 });
