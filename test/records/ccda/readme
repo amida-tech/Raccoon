@@ -1,5 +1,5 @@
 CCD_demo1.xml: 
-Comes from HL7 CCDA package (CDAR2_IG_IHE_CONSOL_R1_DSTU_2011DEC.zip file "CCD 1.xml")
+Comes from HL7 CCDA package (CDAR2_IG_IHE_CONSOL_DSTU_R1dot1_2012JUL (1).zip")
 
 CCD_demo2.xml:
 Is CCD_demo1 + Eggs added from sample_ccdas/EMERGE/Patient-429.xml + Neomycin Sulfate 500 MG added from sample_ccdas/EMERGE/Patient-139.xml
