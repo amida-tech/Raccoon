@@ -73,9 +73,9 @@ describe('Matching library (match.js) tests', function () {
         });
 
 
-        it('full record comparison of two differnt documents', function () {
+        it('full record comparison of two different documents', function () {
             var match = new Match(compare);
-            var m = match.match(bb,bb4);
+            var m = match.match(bb.data,bb4.data);
             //console.log(JSON.stringify(m,null,4));
 
             //var m2 = match.match(bb2,bb3);
