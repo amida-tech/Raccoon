@@ -186,5 +186,31 @@ describe('ccda to models logic', function() {
             expect(allergy.severity).to.equal('Moderate to severe');
             done();
         });
-   });
+    });
+    
+    describe('status', function() {
+        var allergies = null;
+        
+        before(function(done) {
+            var bb = readBBFile('test/records/ccda2model/allergyStatus.xml');
+            allergies = bb.allergies();
+            done();
+        });
+        
+        it('status observation exists, problem act ignored', function(done) {
+            expect(allergies).to.have.length.above(0);
+            var allergy = allergies[0];
+            expect(allergy).to.exist;
+            expect(allergy.status).to.equal('Inactive');
+            done();
+        });
+        
+        it('status observation missing, problem act ignored', function(done) {
+            expect(allergies).to.have.length.above(1);
+            var allergy = allergies[1];
+            expect(allergy).to.exist;
+            expect(allergy.status).to.equal(null);
+            done();
+        });
+    });
 });
