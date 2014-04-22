@@ -1,0 +1,53 @@
+[
+	{
+		"date_range": {
+			"start": null,
+			"end": null
+		},
+		"name": "ALLERGENIC EXTRACT, PENICILLIN",
+		"code": "314422",
+		"code_system": "2.16.840.1.113883.6.88",
+		"code_system_name": "RxNorm",
+		"status": null,
+		"severity": null,
+		"reaction": {
+			"name": null,
+			"code": null,
+			"code_system": null
+		}
+	},
+	{
+		"date_range": {
+			"start": null,
+			"end": null
+		},
+		"name": null,
+		"code": null,
+		"code_system": null,
+		"code_system_name": null,
+		"status": null,
+		"severity": null,
+		"reaction": {
+			"name": null,
+			"code": null,
+			"code_system": null
+		}
+	},
+	{
+		"date_range": {
+			"start": null,
+			"end": null
+		},
+		"name": null,
+		"code": null,
+		"code_system": null,
+		"code_system_name": null,
+		"status": null,
+		"severity": null,
+		"reaction": {
+			"name": null,
+			"code": null,
+			"code_system": null
+		}
+	}
+]

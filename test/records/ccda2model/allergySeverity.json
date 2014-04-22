@@ -1,0 +1,53 @@
+[
+	{
+		"date_range": {
+			"start": null,
+			"end": null
+		},
+		"name": null,
+		"code": null,
+		"code_system": null,
+		"code_system_name": null,
+		"status": null,
+		"severity": "Mild",
+		"reaction": {
+			"name": "Mild",
+			"code": "255604002",
+			"code_system": "2.16.840.1.113883.6.96"
+		}
+	},
+	{
+		"date_range": {
+			"start": null,
+			"end": null
+		},
+		"name": null,
+		"code": null,
+		"code_system": null,
+		"code_system_name": null,
+		"status": null,
+		"severity": null,
+		"reaction": {
+			"name": null,
+			"code": null,
+			"code_system": null
+		}
+	},
+	{
+		"date_range": {
+			"start": null,
+			"end": null
+		},
+		"name": null,
+		"code": null,
+		"code_system": null,
+		"code_system_name": null,
+		"status": null,
+		"severity": "Moderate to severe",
+		"reaction": {
+			"name": null,
+			"code": null,
+			"code_system": null
+		}
+	}
+]

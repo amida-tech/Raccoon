@@ -1,0 +1,70 @@
+[
+	{
+		"date_range": {
+			"start": null,
+			"end": null
+		},
+		"name": null,
+		"code": null,
+		"code_system": null,
+		"code_system_name": null,
+		"status": null,
+		"severity": "Mild",
+		"reaction": {
+			"name": "Nausea",
+			"code": "422587007",
+			"code_system": "2.16.840.1.113883.6.96"
+		}
+	},
+	{
+		"date_range": {
+			"start": null,
+			"end": null
+		},
+		"name": null,
+		"code": null,
+		"code_system": null,
+		"code_system_name": null,
+		"status": null,
+		"severity": null,
+		"reaction": {
+			"name": null,
+			"code": null,
+			"code_system": null
+		}
+	},
+	{
+		"date_range": {
+			"start": null,
+			"end": null
+		},
+		"name": null,
+		"code": null,
+		"code_system": null,
+		"code_system_name": null,
+		"status": null,
+		"severity": null,
+		"reaction": {
+			"name": null,
+			"code": null,
+			"code_system": null
+		}
+	},
+	{
+		"date_range": {
+			"start": null,
+			"end": null
+		},
+		"name": null,
+		"code": null,
+		"code_system": null,
+		"code_system_name": null,
+		"status": null,
+		"severity": null,
+		"reaction": {
+			"name": "Skin Rashes/Hives",
+			"code": "64144002",
+			"code_system": "2.16.840.1.113883.6.96"
+		}
+	}
+]

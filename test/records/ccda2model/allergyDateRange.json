@@ -1,0 +1,138 @@
+[
+	{
+		"date_range": {
+			"start": "2008-05-01T04:00:00.000Z",
+			"end": "2012-08-06T04:00:00.000Z"
+		},
+		"name": null,
+		"code": null,
+		"code_system": null,
+		"code_system_name": null,
+		"status": null,
+		"severity": null,
+		"reaction": {
+			"name": null,
+			"code": null,
+			"code_system": null
+		}
+	},
+	{
+		"date_range": {
+			"start": "2009-09-02T04:00:00.000Z",
+			"end": "2010-01-03T05:00:00.000Z"
+		},
+		"name": null,
+		"code": null,
+		"code_system": null,
+		"code_system_name": null,
+		"status": null,
+		"severity": null,
+		"reaction": {
+			"name": null,
+			"code": null,
+			"code_system": null
+		}
+	},
+	{
+		"date_range": {
+			"start": "2007-05-01T04:00:00.000Z",
+			"end": "2007-05-01T04:00:00.000Z"
+		},
+		"name": null,
+		"code": null,
+		"code_system": null,
+		"code_system_name": null,
+		"status": null,
+		"severity": null,
+		"reaction": {
+			"name": null,
+			"code": null,
+			"code_system": null
+		}
+	},
+	{
+		"date_range": {
+			"start": "2009-01-08T05:00:00.000Z",
+			"end": null
+		},
+		"name": null,
+		"code": null,
+		"code_system": null,
+		"code_system_name": null,
+		"status": null,
+		"severity": null,
+		"reaction": {
+			"name": null,
+			"code": null,
+			"code_system": null
+		}
+	},
+	{
+		"date_range": {
+			"start": "1998-01-10T05:00:00.000Z",
+			"end": null
+		},
+		"name": null,
+		"code": null,
+		"code_system": null,
+		"code_system_name": null,
+		"status": null,
+		"severity": null,
+		"reaction": {
+			"name": null,
+			"code": null,
+			"code_system": null
+		}
+	},
+	{
+		"date_range": {
+			"start": null,
+			"end": null
+		},
+		"name": null,
+		"code": null,
+		"code_system": null,
+		"code_system_name": null,
+		"status": null,
+		"severity": null,
+		"reaction": {
+			"name": null,
+			"code": null,
+			"code_system": null
+		}
+	},
+	{
+		"date_range": {
+			"start": null,
+			"end": null
+		},
+		"name": null,
+		"code": null,
+		"code_system": null,
+		"code_system_name": null,
+		"status": null,
+		"severity": null,
+		"reaction": {
+			"name": null,
+			"code": null,
+			"code_system": null
+		}
+	},
+	{
+		"date_range": {
+			"start": null,
+			"end": null
+		},
+		"name": null,
+		"code": null,
+		"code_system": null,
+		"code_system_name": null,
+		"status": null,
+		"severity": null,
+		"reaction": {
+			"name": null,
+			"code": null,
+			"code_system": null
+		}
+	}
+]

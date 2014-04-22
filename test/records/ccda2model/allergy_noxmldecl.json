@@ -1,0 +1,19 @@
+[
+	{
+		"date_range": {
+			"start": null,
+			"end": null
+		},
+		"name": null,
+		"code": "314422",
+		"code_system": null,
+		"code_system_name": null,
+		"status": null,
+		"severity": null,
+		"reaction": {
+			"name": null,
+			"code": null,
+			"code_system": null
+		}
+	}
+]

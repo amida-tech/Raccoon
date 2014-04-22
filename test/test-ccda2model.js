@@ -24,6 +24,10 @@ var BlueButton = require('../lib/bluebutton.min.js');
 var readBBFile = function(filePath) {
     var xml = fs.readFileSync(filePath, 'utf-8');
     var bb = new BlueButton(xml);
+    //var allergies = bb.allergies();
+    //var json2Write = JSON.stringify(allergies, undefined, '\t');
+    //var jsonFilePath = filePath.replace('.xml', '.json');
+    //fs.writeFileSync(jsonFilePath, json2Write);
     return bb;
 };
 
