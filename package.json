@@ -41,6 +41,7 @@
     "grunt-express-server": "0.4.x",
     "grunt-contrib-watch": "0.5.x",
     "grunt-coveralls" :"*",
-    "grunt-istanbul-coverage" :"*"
+    "grunt-istanbul-coverage" :"*",
+    "underscore": "1.6.x"
   }
 }
