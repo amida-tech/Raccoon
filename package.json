@@ -1,7 +1,7 @@
 {
   "author": "Dmitry Kachaev and Matthew McCall",
   "name": "raccoon",
-  "description": "Data Raccoonciliation Engine.",
+  "description": "Data Raccoonciliation Engine. (discontinued, see DRE project)",
   "version": "0.0.1",
   "repository": {
     "type": "git",
